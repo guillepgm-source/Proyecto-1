@@ -76,6 +76,19 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
   },
 ];
 
+// A deliberate freeze-frame + slow punch-in zoom, used sparingly at strong
+// reaction moments (not constantly) - fills the quieter stretch of the
+// video with real accents instead of a repeating shake.
+export type FreezeZoomBeat = {
+  atMs: number;
+  holdMs: number;
+};
+
+export const FREEZE_ZOOM_BEATS: FreezeZoomBeat[] = [
+  { atMs: 52350, holdMs: 1500 },
+  { atMs: 62700, holdMs: 1450 },
+];
+
 export type SfxBeat = {
   src: "whoosh" | "pop" | "tick" | "ding";
   atMs: number;
@@ -95,6 +108,8 @@ export const SFX_BEATS: SfxBeat[] = [
   { src: "pop", atMs: 46900, volume: 0.75 },
   { src: "pop", atMs: 47800, volume: 0.75 },
   { src: "whoosh", atMs: 48600, volume: 0.8 },
+  { src: "tick", atMs: 52350, volume: 0.85 },
+  { src: "tick", atMs: 62700, volume: 0.85 },
   { src: "ding", atMs: 66400, volume: 0.9 },
 ];
 

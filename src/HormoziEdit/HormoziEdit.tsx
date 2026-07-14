@@ -16,10 +16,10 @@ import { SfxLayer } from "./SfxLayer";
 import {
   getFlashOpacity,
   getKenBurnsScale,
-  getMicroPunchScale,
   getPunchRotation,
   getZoomPunchScale,
 } from "./zoomPunch";
+import { FreezeZoomLayer } from "./FreezeZoomLayer";
 import type { CutSegment } from "./types";
 import { TITLE_CARD_BEATS } from "./beats";
 
@@ -90,14 +90,10 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   const { width, fps } = useVideoConfig();
 
   const cutBoundaries = cutlist.map((segment) => segment.startFrame);
-  const captionBoundaries = pages.map((page) =>
-    Math.round((page.startMs / 1000) * fps),
-  );
   const punchScale = getZoomPunchScale(frame, cutBoundaries);
   const punchRotation = getPunchRotation(frame, cutBoundaries);
   const flashOpacity = getFlashOpacity(frame, cutBoundaries);
   const kenBurns = getKenBurnsScale(frame);
-  const microPunch = getMicroPunchScale(frame, captionBoundaries);
 
   const captionWidth = Math.min(CAPTION_SAFE_WIDTH, width * 0.86);
 
@@ -114,7 +110,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       <AbsoluteFill
         style={{
-          transform: `scale(${punchScale * kenBurns * microPunch}) rotate(${punchRotation}deg)`,
+          transform: `scale(${punchScale * kenBurns}) rotate(${punchRotation}deg)`,
           filter: "contrast(1.1) saturate(0.82) brightness(0.9)",
         }}
       >
@@ -138,6 +134,12 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
           background:
             "linear-gradient(to bottom, rgba(0,0,0,0) 42%, rgba(0,0,0,0.5) 76%, rgba(0,0,0,0.62) 100%)",
         }}
+      />
+
+      <FreezeZoomLayer
+        videoSrc={videoSrc}
+        cutlist={cutlist}
+        objectPosition={VIDEO_OBJECT_POSITION}
       />
 
       <DoodleLayer />

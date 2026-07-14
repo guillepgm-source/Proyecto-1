@@ -65,13 +65,6 @@ const HeartIcon: React.FC<{ scale: number }> = ({ scale }) => (
   </svg>
 );
 
-// Original line-icon (not an emoji glyph) used on the glucógeno chip.
-const BoltIcon: React.FC<{ size?: number; color?: string }> = ({ size = 22, color = ACCENT }) => (
-  <svg width={size} height={size * 1.3} viewBox="0 0 20 26" fill="none">
-    <path d="M11 0 L1 15 H9 L7 26 L19 9 H10 Z" fill={color} />
-  </svg>
-);
-
 const SectionHeader: React.FC<{ children: React.ReactNode; enter: number }> = ({ children, enter }) => (
   <div
     style={{
@@ -343,12 +336,7 @@ const AbsoluteFillFlash: React.FC<{ opacity: number; color: string }> = ({ opaci
 
 export const KcalCutaway: React.FC<{ durationFrames: number }> = ({ durationFrames }) => {
   const { frame, enter, exit } = useSceneMotion(durationFrames);
-  const grow = interpolate(frame, [5, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const chipIn = interpolate(frame, [34, 44], [0, 1], {
-    easing: Easing.out(Easing.back(2)),
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  const grow = interpolate(frame, [5, 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <div
@@ -386,25 +374,6 @@ export const KcalCutaway: React.FC<{ durationFrames: number }> = ({ durationFram
         />
       </div>
 
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 10,
-          padding: "14px 26px",
-          borderRadius: 999,
-          background: "rgba(8,10,10,0.82)",
-          border: `2px solid ${ACCENT}`,
-          boxShadow: `0 0 24px rgba(57,255,136,0.25)`,
-          color: "white",
-          fontFamily: pixelFont,
-          fontSize: 18,
-          transform: `scale(${chipIn})`,
-        }}
-      >
-        <BoltIcon />
-        GLUCÓGENO MUSCULAR
-      </div>
     </div>
   );
 };

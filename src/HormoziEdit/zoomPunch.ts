@@ -47,32 +47,8 @@ export const getFlashOpacity = (frame: number, boundaries: number[]): number => 
   });
 };
 
-const MICRO_PUNCH_DURATION_FRAMES = 5;
-const MICRO_PUNCH_STRENGTH = 0.035;
-
-// A much smaller, quicker punch fired on every caption page change (not
-// just hard cuts), so the frame keeps a constant subtle pulse of motion
-// even through long uncut lines instead of only moving at jump cuts.
-export const getMicroPunchScale = (frame: number, boundaries: number[]): number => {
-  const local = nearestBoundary(frame, boundaries);
-  if (local >= MICRO_PUNCH_DURATION_FRAMES) {
-    return 1;
-  }
-
-  return interpolate(
-    local,
-    [0, 1, MICRO_PUNCH_DURATION_FRAMES],
-    [1, 1 + MICRO_PUNCH_STRENGTH, 1],
-    {
-      easing: Easing.out(Easing.cubic),
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    },
-  );
-};
-
 const KEN_BURNS_CYCLE_FRAMES = 220;
-const KEN_BURNS_STRENGTH = 0.05;
+const KEN_BURNS_STRENGTH = 0.06;
 
 // A slow, subtle drift-zoom that runs continuously under the punch effect so
 // longer uncut lines still feel alive instead of static.
