@@ -2,9 +2,10 @@ import { Sequence, useVideoConfig } from "remotion";
 import type { TikTokPage } from "@remotion/captions";
 import { CaptionPage } from "./CaptionPage";
 
-export const CaptionOverlay: React.FC<{ pages: TikTokPage[] }> = ({
-  pages,
-}) => {
+export const CaptionOverlay: React.FC<{
+  pages: TikTokPage[];
+  containerWidth: number;
+}> = ({ pages, containerWidth }) => {
   const { fps } = useVideoConfig();
 
   return (
@@ -30,7 +31,11 @@ export const CaptionOverlay: React.FC<{ pages: TikTokPage[] }> = ({
             layout="none"
             name={`Caption ${index + 1}`}
           >
-            <CaptionPage page={page} pageDurationInFrames={durationInFrames} />
+            <CaptionPage
+              page={page}
+              pageDurationInFrames={durationInFrames}
+              containerWidth={containerWidth}
+            />
           </Sequence>
         );
       })}

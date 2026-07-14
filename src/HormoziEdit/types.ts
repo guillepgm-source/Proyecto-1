@@ -4,3 +4,8 @@ export type CutSegment = {
   startFrame: number;
   durationFrames: number;
 };
+
+export type SourceVideoDimensions = {
+  sourceWidth: number;
+  sourceHeight: number;
+};

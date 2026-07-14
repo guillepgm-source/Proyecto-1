@@ -47,6 +47,17 @@ export const getFlashOpacity = (frame: number, boundaries: number[]): number => 
   });
 };
 
+const KEN_BURNS_CYCLE_FRAMES = 220;
+const KEN_BURNS_STRENGTH = 0.05;
+
+// A slow, subtle drift-zoom that runs continuously under the punch effect so
+// longer uncut lines still feel alive instead of static.
+export const getKenBurnsScale = (frame: number): number => {
+  const phase = (frame % KEN_BURNS_CYCLE_FRAMES) / KEN_BURNS_CYCLE_FRAMES;
+  const wave = Math.sin(phase * Math.PI * 2 - Math.PI / 2); // -1..1, starts at -1
+  return 1 + ((wave + 1) / 2) * KEN_BURNS_STRENGTH;
+};
+
 // A tiny rotational wiggle at each cut for extra kinetic energy.
 export const getPunchRotation = (frame: number, boundaries: number[]): number => {
   const local = nearestBoundary(frame, boundaries);

@@ -10,10 +10,10 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="HormoziEdit"
         component={HormoziEdit}
-        durationInFrames={1945}
+        durationInFrames={2038}
         fps={30}
-        width={1080}
-        height={1920}
+        width={1920}
+        height={1080}
         defaultProps={{
           videoSrc: "videos/source.mp4",
           captionsSrc: "captions/source.json",
