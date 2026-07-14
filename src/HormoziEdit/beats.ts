@@ -36,18 +36,18 @@ export const GRAPHIC_BEATS: GraphicBeat[] = [
     kind: "checklist",
     title: "HOY VERÁS",
     items: [
-      { label: "Vengo a hacer el capullo", atMs: 3546 },
-      { label: "Me quejo de la sociedad", atMs: 5843 },
-      { label: "Que no cometas errores", atMs: 7640 },
+      { label: "Vengo a hacer el capullo", atMs: 1795 },
+      { label: "Me quejo de la sociedad", atMs: 3153 },
+      { label: "Que no cometas errores", atMs: 5154 },
     ],
-    hideAtMs: 10400,
+    hideAtMs: 7350,
   },
-  { kind: "zoneChart", startMs: 37450, endMs: 42450 },
-  { kind: "kcalCompare", startMs: 47250, endMs: 51500 },
+  { kind: "zoneChart", startMs: 37500, endMs: 42450 },
+  { kind: "kcalCompare", startMs: 46280, endMs: 50350 },
   {
     kind: "chip",
-    startMs: 53350,
-    endMs: 56700,
+    startMs: 52400,
+    endMs: 55550,
     icon: "⚡",
     label: "GLUCÓGENO MUSCULAR",
   },
@@ -66,9 +66,26 @@ export const TITLE_CARD_BEATS: TitleCardBeat[] = [
     kind: "titleCard",
     lineAccent: "LO QUE NO",
     lineWhite: "DEBES HACER",
-    startMs: 10450,
-    endMs: 12300,
+    startMs: 7350,
+    endMs: 9300,
   },
+];
+
+export type SfxBeat = {
+  src: "whoosh" | "pop" | "tick" | "ding";
+  atMs: number;
+  volume?: number;
+};
+
+export const SFX_BEATS: SfxBeat[] = [
+  { src: "whoosh", atMs: 7350 },
+  { src: "pop", atMs: 1535 },
+  { src: "tick", atMs: 19300 },
+  { src: "tick", atMs: 29950 },
+  { src: "pop", atMs: 37500 },
+  { src: "pop", atMs: 46280 },
+  { src: "pop", atMs: 52400 },
+  { src: "ding", atMs: 66450, volume: 0.8 },
 ];
 
 export type DoodleBeat = {
@@ -80,8 +97,8 @@ export type DoodleBeat = {
 
 export const DOODLE_BEATS: DoodleBeat[] = [
   { kind: "wave", startMs: 0, endMs: 950, side: "right" },
-  { kind: "runner", startMs: 20900, endMs: 22150, side: "left" },
-  { kind: "bigX", startMs: 30350, endMs: 31350, side: "right" },
-  { kind: "circleScribble", startMs: 36250, endMs: 37600, side: "left" },
-  { kind: "checkStamp", startMs: 66000, endMs: 67930, side: "right" },
+  { kind: "runner", startMs: 19300, endMs: 20550, side: "left" },
+  { kind: "bigX", startMs: 29950, endMs: 30950, side: "right" },
+  { kind: "circleScribble", startMs: 36000, endMs: 37450, side: "left" },
+  { kind: "checkStamp", startMs: 66450, endMs: 67900, side: "right" },
 ];

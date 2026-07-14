@@ -83,8 +83,7 @@ export const CaptionPage: React.FC<{
           textTransform: "uppercase",
           whiteSpace: "pre-wrap",
           overflowWrap: "break-word",
-          scale: `${enter * exit}`,
-          translate: `0px ${enterY + exitY}px`,
+          transform: `scale(${enter * exit}) translateY(${enterY + exitY}px)`,
           opacity: exit,
           color: "white",
           WebkitTextStroke: `${Math.max(1.5, fontSize * 0.025)}px rgba(0,0,0,0.75)`,
@@ -125,7 +124,7 @@ export const CaptionPage: React.FC<{
                 style={{
                   display: "inline-block",
                   marginLeft: "0.28em",
-                  scale: `${pop}`,
+                  transform: `scale(${pop})`,
                   color: isActive ? ACCENT : "white",
                   textShadow: isActive
                     ? `0 0 16px ${ACCENT}, 0 0 34px ${ACCENT}`

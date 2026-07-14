@@ -12,6 +12,7 @@ import { CaptionOverlay } from "./CaptionOverlay";
 import { DoodleLayer } from "./DoodleLayer";
 import { GraphicsLayer } from "./GraphicsLayer";
 import { TitleCardLayer } from "./TitleCardLayer";
+import { SfxLayer } from "./SfxLayer";
 import {
   getFlashOpacity,
   getKenBurnsScale,
@@ -135,6 +136,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
       <DoodleLayer />
       <GraphicsLayer />
       <TitleCardLayer />
+      <SfxLayer />
 
       <AbsoluteFill style={{ opacity: titleCardActive ? 0 : 1 }}>
         <CaptionOverlay pages={pages} containerWidth={captionWidth} />

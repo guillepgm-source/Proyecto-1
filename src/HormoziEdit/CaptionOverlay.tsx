@@ -18,7 +18,6 @@ export const CaptionOverlay: React.FC<{
       {pages.map((page, index) => {
         const nextPage = pages[index + 1] ?? null;
         const isFirst = index === 0;
-        const isLast = nextPage === null;
 
         const officialStartFrame = Math.round((page.startMs / 1000) * fps);
         const officialEndFrame = Math.round(
@@ -26,9 +25,12 @@ export const CaptionOverlay: React.FC<{
             fps,
         );
 
+        // Only the incoming page premounts early (for the pop-in anticipation);
+        // the outgoing page is NOT also extended past its boundary, otherwise
+        // the two would overlap for 2x this window instead of just one.
         const premountFrames = isFirst ? 0 : OVERLAP_FRAMES;
         const from = officialStartFrame - premountFrames;
-        const to = officialEndFrame + (isLast ? 0 : OVERLAP_FRAMES);
+        const to = officialEndFrame;
         const durationInFrames = to - from;
 
         if (durationInFrames <= 0) {
