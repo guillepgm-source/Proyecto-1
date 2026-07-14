@@ -53,6 +53,24 @@ export const GRAPHIC_BEATS: GraphicBeat[] = [
   },
 ];
 
+export type TitleCardBeat = {
+  kind: "titleCard";
+  lineAccent: string;
+  lineWhite: string;
+  startMs: number;
+  endMs: number;
+};
+
+export const TITLE_CARD_BEATS: TitleCardBeat[] = [
+  {
+    kind: "titleCard",
+    lineAccent: "LO QUE NO",
+    lineWhite: "DEBES HACER",
+    startMs: 10450,
+    endMs: 12300,
+  },
+];
+
 export type DoodleBeat = {
   kind: "wave" | "runner" | "bigX" | "circleScribble" | "checkStamp";
   startMs: number;

@@ -4,7 +4,9 @@ import { loadFont } from "@remotion/google-fonts/Anton";
 
 const { fontFamily } = loadFont();
 
-const HIGHLIGHT_BG = "#FFE100";
+// Clean glowing white captions, no per-word highlight chip - the active
+// word instead pops in a bright accent glow, closer to the reference style.
+const ACCENT = "#39FF88";
 const WORD_POP_DURATION = 6;
 
 export const CaptionPage: React.FC<{
@@ -85,9 +87,9 @@ export const CaptionPage: React.FC<{
           translate: `0px ${enterY + exitY}px`,
           opacity: exit,
           color: "white",
-          WebkitTextStroke: `${Math.max(2, fontSize * 0.045)}px black`,
+          WebkitTextStroke: `${Math.max(1.5, fontSize * 0.025)}px rgba(0,0,0,0.75)`,
           paintOrder: "stroke fill",
-          textShadow: "0 6px 22px rgba(0,0,0,0.6)",
+          textShadow: "0 6px 22px rgba(0,0,0,0.7)",
         }}
       >
         {page.tokens.map((token) => {
@@ -124,14 +126,11 @@ export const CaptionPage: React.FC<{
                   display: "inline-block",
                   marginLeft: "0.28em",
                   scale: `${pop}`,
-                  backgroundColor: isActive ? HIGHLIGHT_BG : "transparent",
-                  color: isActive ? "black" : "white",
-                  WebkitTextStroke: isActive
-                    ? "0px transparent"
-                    : `${Math.max(2, fontSize * 0.045)}px black`,
-                  borderRadius: 8,
-                  padding: isActive ? "0.05em 0.14em" : undefined,
-                  opacity: wasSpoken || isActive ? 1 : 0.82,
+                  color: isActive ? ACCENT : "white",
+                  textShadow: isActive
+                    ? `0 0 16px ${ACCENT}, 0 0 34px ${ACCENT}`
+                    : undefined,
+                  opacity: wasSpoken || isActive ? 1 : 0.78,
                 }}
               >
                 {token.text.trimStart()}

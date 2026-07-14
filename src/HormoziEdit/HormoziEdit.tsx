@@ -11,6 +11,7 @@ import { JumpCutVideo } from "./JumpCutVideo";
 import { CaptionOverlay } from "./CaptionOverlay";
 import { DoodleLayer } from "./DoodleLayer";
 import { GraphicsLayer } from "./GraphicsLayer";
+import { TitleCardLayer } from "./TitleCardLayer";
 import {
   getFlashOpacity,
   getKenBurnsScale,
@@ -18,6 +19,7 @@ import {
   getZoomPunchScale,
 } from "./zoomPunch";
 import type { CutSegment } from "./types";
+import { TITLE_CARD_BEATS } from "./beats";
 
 // Short, punchy groups of 1-2 words per caption page for a fast hook-style
 // pace that also comfortably fits the narrower vertical-strip width.
@@ -83,7 +85,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   pages = [],
 }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width, fps } = useVideoConfig();
 
   const cutBoundaries = cutlist.map((segment) => segment.startFrame);
   const punchScale = getZoomPunchScale(frame, cutBoundaries);
@@ -93,11 +95,19 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
 
   const captionWidth = Math.min(CAPTION_SAFE_WIDTH, width * 0.86);
 
+  // Hide the running captions while a big pixel title card is on screen -
+  // showing both at once duplicates the same words and looks cluttered.
+  const nowMs = (frame / fps) * 1000;
+  const titleCardActive = TITLE_CARD_BEATS.some(
+    (beat) => nowMs >= beat.startMs - 150 && nowMs < beat.endMs,
+  );
+
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       <AbsoluteFill
         style={{
           transform: `scale(${punchScale * kenBurns}) rotate(${punchRotation}deg)`,
+          filter: "contrast(1.1) saturate(0.82) brightness(0.9)",
         }}
       >
         <JumpCutVideo
@@ -106,6 +116,14 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
           objectPosition={VIDEO_OBJECT_POSITION}
         />
       </AbsoluteFill>
+
+      {/* Moody black vignette, closer to the reference's black-backdrop look. */}
+      <AbsoluteFill
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 42%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.55) 88%, rgba(0,0,0,0.82) 100%)",
+        }}
+      />
 
       <AbsoluteFill
         style={{
@@ -116,8 +134,11 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
 
       <DoodleLayer />
       <GraphicsLayer />
+      <TitleCardLayer />
 
-      <CaptionOverlay pages={pages} containerWidth={captionWidth} />
+      <AbsoluteFill style={{ opacity: titleCardActive ? 0 : 1 }}>
+        <CaptionOverlay pages={pages} containerWidth={captionWidth} />
+      </AbsoluteFill>
 
       <AbsoluteFill
         style={{ backgroundColor: "white", opacity: flashOpacity }}

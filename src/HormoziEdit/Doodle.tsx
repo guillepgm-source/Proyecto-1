@@ -52,7 +52,7 @@ const Wave: React.FC<{ progress: number }> = ({ progress }) => (
     />
     <path
       d="M92 96 C130 78 150 40 168 26"
-      stroke="#FFE100"
+      stroke="#39FF88"
       strokeWidth="12"
       strokeLinecap="round"
       {...drawStroke(progress, 130)}
@@ -145,7 +145,7 @@ const CircleScribble: React.FC<{ progress: number }> = ({ progress }) => (
   <svg viewBox="0 0 200 200" fill="none">
     <path
       d="M100 26 C150 26 176 60 174 100 C172 144 138 174 96 172 C54 170 26 138 28 98 C30 60 56 30 96 28 C104 27 108 33 100 36"
-      stroke="#FFE100"
+      stroke="#39FF88"
       strokeWidth="14"
       strokeLinecap="round"
       strokeLinejoin="round"

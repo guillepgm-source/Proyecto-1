@@ -13,8 +13,8 @@ const { fontFamily: headlineFont } = loadFont();
 
 const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
 
-const CARD_BG = "rgba(14,14,16,0.86)";
-const ACCENT = "#FFE100";
+const CARD_BG = "rgba(8,10,10,0.82)";
+const ACCENT = "#39FF88";
 
 const useCardMotion = (durationFrames: number, side: "left" | "right") => {
   const frame = useCurrentFrame();
@@ -32,6 +32,33 @@ const useCardMotion = (durationFrames: number, side: "left" | "right") => {
   return { opacity: enter * exit, transform: `translateX(${translateX}px) scale(${0.85 + enter * 0.15})` };
 };
 
+// A thin glowing connector line dropping into the label, echoing the
+// line-and-callout motif used throughout the reference edit.
+const Connector: React.FC<{ durationFrames: number }> = ({ durationFrames }) => {
+  const frame = useCurrentFrame();
+  const grow = interpolate(frame, [0, 10], [0, 1], {
+    easing: Easing.out(Easing.cubic),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const exit = interpolate(frame, [durationFrames - 10, durationFrames], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return (
+    <div
+      style={{
+        width: 3,
+        height: 34 * grow,
+        background: ACCENT,
+        boxShadow: `0 0 10px ${ACCENT}`,
+        opacity: exit,
+        marginBottom: 10,
+      }}
+    />
+  );
+};
+
 const Card: React.FC<{
   side: "left" | "right";
   durationFrames: number;
@@ -40,20 +67,24 @@ const Card: React.FC<{
 }> = ({ side, durationFrames, width = 440, children }) => {
   const motion = useCardMotion(durationFrames, side);
   return (
-    <div
-      style={{
-        width,
-        borderRadius: 20,
-        background: CARD_BG,
-        border: `2px solid ${ACCENT}`,
-        boxShadow: "0 20px 45px rgba(0,0,0,0.45)",
-        padding: "22px 24px",
-        color: "white",
-        fontFamily: "system-ui, sans-serif",
-        ...motion,
-      }}
-    >
-      {children}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: side === "left" ? "flex-start" : "flex-end" }}>
+      <Connector durationFrames={durationFrames} />
+      <div
+        style={{
+          width,
+          borderRadius: 10,
+          background: CARD_BG,
+          borderLeft: side === "left" ? `3px solid ${ACCENT}` : undefined,
+          borderRight: side === "right" ? `3px solid ${ACCENT}` : undefined,
+          boxShadow: `0 20px 45px rgba(0,0,0,0.5), 0 0 20px rgba(57,255,136,0.08)`,
+          padding: "20px 22px",
+          color: "white",
+          fontFamily: "system-ui, sans-serif",
+          ...motion,
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };
