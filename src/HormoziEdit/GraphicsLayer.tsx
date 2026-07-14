@@ -277,7 +277,10 @@ const SIDE_BY_KIND: Record<GraphicBeat["kind"], "left" | "right"> = {
   chip: "right",
 };
 
-export const GraphicsLayer: React.FC<{ marginWidth: number }> = ({ marginWidth }) => {
+// Graphics live in the top corners: a band that's clear of both the face
+// (center) and the caption zone (which starts around 60% down the frame),
+// so nothing ever needs to sit outside the visible 16:9 canvas.
+export const GraphicsLayer: React.FC = () => {
   const { fps } = useVideoConfig();
 
   return (
@@ -294,15 +297,13 @@ export const GraphicsLayer: React.FC<{ marginWidth: number }> = ({ marginWidth }
           <Sequence key={index} from={from} durationInFrames={durationFrames} layout="none" name={`Graphic ${beat.kind}`}>
             <AbsoluteFill
               style={{
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 alignItems: side === "left" ? "flex-start" : "flex-end",
-                padding: "0 3%",
+                padding: "4.5% 3%",
                 pointerEvents: "none",
               }}
             >
-              <div style={{ maxWidth: marginWidth * 0.92 }}>
-                <BeatRenderer beat={beat} durationFrames={durationFrames} />
-              </div>
+              <BeatRenderer beat={beat} durationFrames={durationFrames} />
             </AbsoluteFill>
           </Sequence>
         );

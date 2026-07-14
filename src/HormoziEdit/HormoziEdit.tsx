@@ -7,7 +7,6 @@ import {
 } from "remotion";
 import type { TikTokPage } from "@remotion/captions";
 import { createTikTokStyleCaptions, type Caption } from "@remotion/captions";
-import { getVideoMetadata } from "./getVideoMetadata";
 import { JumpCutVideo } from "./JumpCutVideo";
 import { CaptionOverlay } from "./CaptionOverlay";
 import { DoodleLayer } from "./DoodleLayer";
@@ -36,15 +35,12 @@ export type HormoziEditProps = {
   // Populated by calculateMetadata before the component ever renders.
   cutlist?: CutSegment[];
   pages?: TikTokPage[];
-  sourceWidth?: number;
-  sourceHeight?: number;
 };
 
 export const hormoziEditCalculateMetadata: CalculateMetadataFunction<
   HormoziEditProps
 > = async ({ props, abortSignal }) => {
-  const [videoMeta, cutlist, rawCaptions] = await Promise.all([
-    getVideoMetadata(staticFile(props.videoSrc)),
+  const [cutlist, rawCaptions] = await Promise.all([
     fetch(staticFile(props.cutlistSrc), { signal: abortSignal }).then(
       (r) => r.json() as Promise<CutSegment[]>,
     ),
@@ -69,21 +65,26 @@ export const hormoziEditCalculateMetadata: CalculateMetadataFunction<
       ...props,
       cutlist,
       pages,
-      sourceWidth: videoMeta.width,
-      sourceHeight: videoMeta.height,
     },
   };
 };
+
+// The vertical source is cropped to fill the full 16:9 frame edge-to-edge
+// (no pillarbox). This biases the crop toward the top of the original
+// portrait frame, since that's where the face sits in this selfie footage.
+const VIDEO_OBJECT_POSITION = "50% 20%";
+
+// Captions never span the full canvas width - keep a safe margin so text
+// always stays comfortably inside the visible 1920x1080 frame.
+const CAPTION_SAFE_WIDTH = 1500;
 
 export const HormoziEdit: React.FC<HormoziEditProps> = ({
   videoSrc,
   cutlist = [],
   pages = [],
-  sourceWidth = 1080,
-  sourceHeight = 1920,
 }) => {
   const frame = useCurrentFrame();
-  const { width, height } = useVideoConfig();
+  const { width } = useVideoConfig();
 
   const cutBoundaries = cutlist.map((segment) => segment.startFrame);
   const punchScale = getZoomPunchScale(frame, cutBoundaries);
@@ -91,46 +92,33 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   const flashOpacity = getFlashOpacity(frame, cutBoundaries);
   const kenBurns = getKenBurnsScale(frame);
 
-  // The vertical clip is shown at full height, letterboxed into the 16:9
-  // canvas; a blurred, cropped copy of the same footage fills the sides so
-  // there are no dead bars, and the margins host graphics/doodles.
-  const stripWidth = Math.round(height * (sourceWidth / sourceHeight));
-  const marginWidth = (width - stripWidth) / 2;
+  const captionWidth = Math.min(CAPTION_SAFE_WIDTH, width * 0.86);
 
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
-      <AbsoluteFill style={{ transform: "scale(1.18)", filter: "blur(46px) brightness(0.45) saturate(1.2)" }}>
-        <JumpCutVideo videoSrc={videoSrc} cutlist={cutlist} />
+      <AbsoluteFill
+        style={{
+          transform: `scale(${punchScale * kenBurns}) rotate(${punchRotation}deg)`,
+        }}
+      >
+        <JumpCutVideo
+          videoSrc={videoSrc}
+          cutlist={cutlist}
+          objectPosition={VIDEO_OBJECT_POSITION}
+        />
       </AbsoluteFill>
-      <AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.25)" }} />
 
-      <DoodleLayer marginWidth={marginWidth} />
-      <GraphicsLayer marginWidth={marginWidth} />
+      <AbsoluteFill
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0) 42%, rgba(0,0,0,0.5) 76%, rgba(0,0,0,0.62) 100%)",
+        }}
+      />
 
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-        <div
-          style={{
-            width: stripWidth,
-            height,
-            position: "relative",
-            overflow: "hidden",
-            borderRadius: 22,
-            boxShadow: "0 35px 90px rgba(0,0,0,0.6)",
-            transform: `scale(${punchScale * kenBurns}) rotate(${punchRotation}deg)`,
-          }}
-        >
-          <JumpCutVideo videoSrc={videoSrc} cutlist={cutlist} />
+      <DoodleLayer />
+      <GraphicsLayer />
 
-          <AbsoluteFill
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,0.55) 78%, rgba(0,0,0,0.65) 100%)",
-            }}
-          />
-
-          <CaptionOverlay pages={pages} containerWidth={stripWidth} />
-        </div>
-      </AbsoluteFill>
+      <CaptionOverlay pages={pages} containerWidth={captionWidth} />
 
       <AbsoluteFill
         style={{ backgroundColor: "white", opacity: flashOpacity }}

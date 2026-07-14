@@ -8,7 +8,8 @@ import type { CutSegment } from "./types";
 export const JumpCutVideo: React.FC<{
   videoSrc: string;
   cutlist: CutSegment[];
-}> = ({ videoSrc, cutlist }) => {
+  objectPosition?: string;
+}> = ({ videoSrc, cutlist, objectPosition = "50% 50%" }) => {
   return (
     <>
       {cutlist.map((segment, index) => (
@@ -24,7 +25,7 @@ export const JumpCutVideo: React.FC<{
             trimBefore={segment.trimBefore}
             trimAfter={segment.trimAfter}
             objectFit="cover"
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "100%", objectPosition }}
           />
         </Sequence>
       ))}

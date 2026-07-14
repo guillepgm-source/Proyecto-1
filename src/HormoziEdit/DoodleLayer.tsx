@@ -5,7 +5,10 @@ import { Doodle } from "./Doodle";
 
 const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
 
-export const DoodleLayer: React.FC<{ marginWidth: number }> = ({ marginWidth }) => {
+// Doodles anchor to the bottom corners (graphics live up top, captions sit
+// in the middle band), so the three overlay layers never fight for the same
+// space and everything stays safely inside the 1920x1080 canvas.
+export const DoodleLayer: React.FC = () => {
   const { fps } = useVideoConfig();
 
   return (
@@ -25,17 +28,12 @@ export const DoodleLayer: React.FC<{ marginWidth: number }> = ({ marginWidth }) 
           >
             <AbsoluteFill
               style={{
-                justifyContent: "center",
+                justifyContent: "flex-end",
                 alignItems: beat.side === "left" ? "flex-start" : "flex-end",
-                padding: "0 3.5%",
+                padding: "4% 3%",
               }}
             >
-              <div
-                style={{
-                  width: Math.min(marginWidth * 0.62, 190),
-                  marginTop: index % 2 === 0 ? "-20%" : "16%",
-                }}
-              >
+              <div style={{ width: 150 }}>
                 <DoodleFrameReader kind={beat.kind} durationFrames={durationFrames} />
               </div>
             </AbsoluteFill>

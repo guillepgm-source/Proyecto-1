@@ -10,13 +10,17 @@ const WORD_POP_DURATION = 6;
 export const CaptionPage: React.FC<{
   page: TikTokPage;
   pageDurationInFrames: number;
+  premountFrames: number;
   containerWidth: number;
-}> = ({ page, pageDurationInFrames, containerWidth }) => {
+}> = ({ page, pageDurationInFrames, premountFrames, containerWidth }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const width = containerWidth;
 
-  const currentTimeMs = (frame / fps) * 1000;
+  // frame 0 is `premountFrames` before the page's official start (the
+  // crossfade pre-roll), so shift back to real elapsed time since that
+  // official start before mapping to absolute word timestamps.
+  const currentTimeMs = ((frame - premountFrames) / fps) * 1000;
   const absoluteTimeMs = page.startMs + currentTimeMs;
 
   const enter = interpolate(frame, [0, 9], [0, 1], {
@@ -33,8 +37,22 @@ export const CaptionPage: React.FC<{
 
   const exit = interpolate(
     frame,
-    [pageDurationInFrames - 4, pageDurationInFrames],
+    [pageDurationInFrames - 6, pageDurationInFrames],
     [1, 0],
+    {
+      easing: Easing.in(Easing.cubic),
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    },
+  );
+
+  // The outgoing page slides up and out while the incoming one slides up
+  // into place from below, so during the brief crossfade overlap the two
+  // pages don't just sit stacked on top of each other.
+  const exitY = interpolate(
+    frame,
+    [pageDurationInFrames - 6, pageDurationInFrames],
+    [0, -36],
     {
       easing: Easing.in(Easing.cubic),
       extrapolateLeft: "clamp",
@@ -64,7 +82,7 @@ export const CaptionPage: React.FC<{
           whiteSpace: "pre-wrap",
           overflowWrap: "break-word",
           scale: `${enter * exit}`,
-          translate: `0px ${enterY}px`,
+          translate: `0px ${enterY + exitY}px`,
           opacity: exit,
           color: "white",
           WebkitTextStroke: `${Math.max(2, fontSize * 0.045)}px black`,
@@ -76,9 +94,9 @@ export const CaptionPage: React.FC<{
             token.fromMs <= absoluteTimeMs && token.toMs > absoluteTimeMs;
           const wasSpoken = token.toMs <= absoluteTimeMs;
 
-          const tokenStartFrame = Math.round(
-            ((token.fromMs - page.startMs) / 1000) * fps,
-          );
+          const tokenStartFrame =
+            Math.round(((token.fromMs - page.startMs) / 1000) * fps) +
+            premountFrames;
           const framesSinceStart = frame - tokenStartFrame;
           const pop =
             framesSinceStart >= 0 && framesSinceStart < WORD_POP_DURATION
