@@ -5,6 +5,7 @@ import { loadFont } from "@remotion/google-fonts/Anton";
 const { fontFamily } = loadFont();
 
 const HIGHLIGHT_BG = "#FFE100";
+const WORD_POP_DURATION = 6;
 
 export const CaptionPage: React.FC<{
   page: TikTokPage;
@@ -16,8 +17,14 @@ export const CaptionPage: React.FC<{
   const currentTimeMs = (frame / fps) * 1000;
   const absoluteTimeMs = page.startMs + currentTimeMs;
 
-  const enter = interpolate(frame, [0, 6], [0, 1], {
-    easing: Easing.out(Easing.back(1.8)),
+  const enter = interpolate(frame, [0, 9], [0, 1], {
+    easing: Easing.out(Easing.back(3)),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const enterY = interpolate(frame, [0, 9], [50, 0], {
+    easing: Easing.out(Easing.back(1.5)),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -33,7 +40,7 @@ export const CaptionPage: React.FC<{
     },
   );
 
-  const fontSize = Math.round(width * 0.09);
+  const fontSize = Math.round(width * 0.1);
 
   return (
     <div
@@ -41,7 +48,7 @@ export const CaptionPage: React.FC<{
         position: "absolute",
         left: 0,
         right: 0,
-        top: "62%",
+        top: "60%",
         display: "flex",
         justifyContent: "center",
         padding: "0 6%",
@@ -56,6 +63,7 @@ export const CaptionPage: React.FC<{
           textTransform: "uppercase",
           whiteSpace: "pre-wrap",
           scale: `${enter * exit}`,
+          translate: `0px ${enterY}px`,
           opacity: exit,
           color: "white",
           WebkitTextStroke: `${Math.max(2, fontSize * 0.045)}px black`,
@@ -67,10 +75,30 @@ export const CaptionPage: React.FC<{
             token.fromMs <= absoluteTimeMs && token.toMs > absoluteTimeMs;
           const wasSpoken = token.toMs <= absoluteTimeMs;
 
+          const tokenStartFrame = Math.round(
+            ((token.fromMs - page.startMs) / 1000) * fps,
+          );
+          const framesSinceStart = frame - tokenStartFrame;
+          const pop =
+            framesSinceStart >= 0 && framesSinceStart < WORD_POP_DURATION
+              ? interpolate(
+                  framesSinceStart,
+                  [0, 2, WORD_POP_DURATION],
+                  [1, 1.35, 1],
+                  {
+                    easing: Easing.out(Easing.back(3)),
+                    extrapolateLeft: "clamp",
+                    extrapolateRight: "clamp",
+                  },
+                )
+              : 1;
+
           return (
             <span
               key={token.fromMs}
               style={{
+                display: "inline-block",
+                scale: `${pop}`,
                 backgroundColor: isActive ? HIGHLIGHT_BG : "transparent",
                 color: isActive ? "black" : "white",
                 WebkitTextStroke: isActive
