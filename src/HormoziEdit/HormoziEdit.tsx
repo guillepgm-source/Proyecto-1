@@ -16,6 +16,7 @@ import { SfxLayer } from "./SfxLayer";
 import {
   getFlashOpacity,
   getKenBurnsScale,
+  getMicroPunchScale,
   getPunchRotation,
   getZoomPunchScale,
 } from "./zoomPunch";
@@ -89,10 +90,14 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   const { width, fps } = useVideoConfig();
 
   const cutBoundaries = cutlist.map((segment) => segment.startFrame);
+  const captionBoundaries = pages.map((page) =>
+    Math.round((page.startMs / 1000) * fps),
+  );
   const punchScale = getZoomPunchScale(frame, cutBoundaries);
   const punchRotation = getPunchRotation(frame, cutBoundaries);
   const flashOpacity = getFlashOpacity(frame, cutBoundaries);
   const kenBurns = getKenBurnsScale(frame);
+  const microPunch = getMicroPunchScale(frame, captionBoundaries);
 
   const captionWidth = Math.min(CAPTION_SAFE_WIDTH, width * 0.86);
 
@@ -109,7 +114,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       <AbsoluteFill
         style={{
-          transform: `scale(${punchScale * kenBurns}) rotate(${punchRotation}deg)`,
+          transform: `scale(${punchScale * kenBurns * microPunch}) rotate(${punchRotation}deg)`,
           filter: "contrast(1.1) saturate(0.82) brightness(0.9)",
         }}
       >

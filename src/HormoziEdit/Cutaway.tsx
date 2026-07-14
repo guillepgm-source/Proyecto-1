@@ -8,12 +8,12 @@ const RED = "#FF4D4D";
 
 const useSceneMotion = (durationFrames: number) => {
   const frame = useCurrentFrame();
-  const enter = interpolate(frame, [0, 10], [0, 1], {
+  const enter = interpolate(frame, [0, 6], [0, 1], {
     easing: Easing.out(Easing.cubic),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const exit = interpolate(frame, [durationFrames - 10, durationFrames], [1, 0], {
+  const exit = interpolate(frame, [durationFrames - 7, durationFrames], [1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -117,13 +117,13 @@ const ZONES = [
 export const ZoneCutaway: React.FC<{ durationFrames: number }> = ({ durationFrames }) => {
   const { frame, enter, exit } = useSceneMotion(durationFrames);
   const heartScale = 1 + Math.sin(frame / 5) * 0.08;
-  const barsIn = interpolate(frame, [10, 30], [0, 1], {
+  const barsIn = interpolate(frame, [5, 16], [0, 1], {
     easing: Easing.out(Easing.cubic),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
   const pulse = 1 + Math.sin(frame / 4) * 0.05;
-  const arrowProgress = interpolate(frame, [22, 34], [0, 1], {
+  const arrowProgress = interpolate(frame, [13, 20], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -185,7 +185,7 @@ export const ZoneCutaway: React.FC<{ durationFrames: number }> = ({ durationFram
         })}
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 14, opacity: interpolate(frame, [20, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, opacity: interpolate(frame, [12, 19], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
         <Arrow progress={arrowProgress} rotate={180} length={70} />
         <div
           style={{
@@ -253,10 +253,98 @@ const Bar: React.FC<{
   );
 };
 
+// Original X-mark icon (not an emoji) for the quick rejection flash.
+const XIcon: React.FC<{ size?: number }> = ({ size = 70 }) => (
+  <svg width={size} height={size} viewBox="0 0 70 70" fill="none">
+    <path d="M8 8 L62 62" stroke={RED} strokeWidth="10" strokeLinecap="round" />
+    <path d="M62 8 L8 62" stroke={RED} strokeWidth="10" strokeLinecap="round" />
+  </svg>
+);
+
+// A very short, punchy flash cutaway - a single beat, not a whole diagram,
+// for moments that just need one hard hit (a rejection, a hard cut).
+export const FlashCutaway: React.FC<{
+  durationFrames: number;
+  text: string;
+  color: string;
+  icon?: "x" | "check";
+}> = ({ durationFrames, text, color, icon }) => {
+  const frame = useCurrentFrame();
+  const pop = interpolate(frame, [0, 5], [0.5, 1], {
+    easing: Easing.out(Easing.back(3)),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const exit = interpolate(frame, [durationFrames - 6, durationFrames], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const flash = interpolate(frame, [0, 3, 9], [0, 0.5, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 22,
+      }}
+    >
+      <AbsoluteFillFlash opacity={flash} color={color} />
+      <div style={{ transform: `scale(${pop * exit})`, opacity: exit }}>
+        {icon === "x" ? <XIcon /> : icon === "check" ? <CheckIcon /> : null}
+      </div>
+      <div
+        style={{
+          fontFamily: pixelFont,
+          fontSize: 30,
+          color,
+          textShadow: `0 0 16px ${color}, 0 0 32px ${color}`,
+          textAlign: "center",
+          lineHeight: 1.6,
+          transform: `scale(${pop * exit})`,
+        }}
+      >
+        {text}
+      </div>
+    </div>
+  );
+};
+
+const CheckIcon: React.FC<{ size?: number }> = ({ size = 70 }) => (
+  <svg width={size} height={size} viewBox="0 0 70 70" fill="none">
+    <path
+      d="M14 36 L28 50 L56 18"
+      stroke={ACCENT}
+      strokeWidth="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const AbsoluteFillFlash: React.FC<{ opacity: number; color: string }> = ({ opacity, color }) => (
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      background: color,
+      opacity,
+    }}
+  />
+);
+
 export const KcalCutaway: React.FC<{ durationFrames: number }> = ({ durationFrames }) => {
   const { frame, enter, exit } = useSceneMotion(durationFrames);
-  const grow = interpolate(frame, [8, 60], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const chipIn = interpolate(frame, [70, 90], [0, 1], {
+  const grow = interpolate(frame, [5, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const chipIn = interpolate(frame, [34, 44], [0, 1], {
     easing: Easing.out(Easing.back(2)),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",

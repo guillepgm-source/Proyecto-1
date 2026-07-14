@@ -35,11 +35,45 @@ export type KcalCutawayBeat = {
   endMs: number;
 };
 
-export type CutawayBeat = ZoneCutawayBeat | KcalCutawayBeat;
+export type FlashCutawayBeat = {
+  kind: "flashCutaway";
+  startMs: number;
+  endMs: number;
+  text: string;
+  color: "red" | "green";
+  icon?: "x" | "check";
+};
 
+export type CutawayBeat = ZoneCutawayBeat | KcalCutawayBeat | FlashCutawayBeat;
+
+// Kept short and snappy (1.3-2.5s each) - real quick camera cuts, not long
+// takeovers, spread across more moments instead of two long ones.
 export const CUTAWAY_BEATS: CutawayBeat[] = [
-  { kind: "zoneCutaway", startMs: 37350, endMs: 43900 },
-  { kind: "kcalCutaway", startMs: 46150, endMs: 55700 },
+  {
+    kind: "flashCutaway",
+    startMs: 20550,
+    endMs: 21850,
+    text: "~600 KCAL",
+    color: "red",
+  },
+  { kind: "zoneCutaway", startMs: 37350, endMs: 39550 },
+  {
+    kind: "flashCutaway",
+    startMs: 29800,
+    endMs: 31100,
+    text: "NO FUNCIONA ASÍ",
+    color: "red",
+    icon: "x",
+  },
+  { kind: "kcalCutaway", startMs: 46150, endMs: 48600 },
+  {
+    kind: "flashCutaway",
+    startMs: 66400,
+    endMs: 67900,
+    text: "SIEMPRE ZONA 2",
+    color: "green",
+    icon: "check",
+  },
 ];
 
 export type SfxBeat = {
@@ -52,19 +86,20 @@ export const SFX_BEATS: SfxBeat[] = [
   { src: "whoosh", atMs: 7350, volume: 0.9 },
   { src: "pop", atMs: 1535, volume: 0.7 },
   { src: "tick", atMs: 19300, volume: 0.8 },
-  { src: "tick", atMs: 29950, volume: 0.8 },
+  { src: "whoosh", atMs: 20550, volume: 0.85 },
   { src: "whoosh", atMs: 37350, volume: 0.9 },
   { src: "pop", atMs: 38100, volume: 0.75 },
-  { src: "whoosh", atMs: 43900, volume: 0.85 },
+  { src: "whoosh", atMs: 39550, volume: 0.8 },
+  { src: "tick", atMs: 29800, volume: 0.85 },
   { src: "whoosh", atMs: 46150, volume: 0.9 },
   { src: "pop", atMs: 46900, volume: 0.75 },
-  { src: "pop", atMs: 52400, volume: 0.75 },
-  { src: "whoosh", atMs: 55700, volume: 0.85 },
-  { src: "ding", atMs: 66450, volume: 0.85 },
+  { src: "pop", atMs: 47800, volume: 0.75 },
+  { src: "whoosh", atMs: 48600, volume: 0.8 },
+  { src: "ding", atMs: 66400, volume: 0.9 },
 ];
 
 export type DoodleBeat = {
-  kind: "wave" | "runner" | "bigX" | "circleScribble" | "checkStamp";
+  kind: "wave" | "runner";
   startMs: number;
   endMs: number;
   side: "left" | "right";
@@ -72,7 +107,5 @@ export type DoodleBeat = {
 
 export const DOODLE_BEATS: DoodleBeat[] = [
   { kind: "wave", startMs: 0, endMs: 950, side: "right" },
-  { kind: "runner", startMs: 19300, endMs: 20550, side: "left" },
-  { kind: "bigX", startMs: 29950, endMs: 30950, side: "right" },
-  { kind: "checkStamp", startMs: 66450, endMs: 67900, side: "right" },
+  { kind: "runner", startMs: 19300, endMs: 20500, side: "left" },
 ];

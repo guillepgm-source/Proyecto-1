@@ -1,8 +1,10 @@
 import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
 import { CUTAWAY_BEATS } from "./beats";
-import { KcalCutaway, ZoneCutaway } from "./Cutaway";
+import { FlashCutaway, KcalCutaway, ZoneCutaway } from "./Cutaway";
 
 const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
+
+const FLASH_COLORS = { red: "#FF4D4D", green: "#39FF88" };
 
 // Real "cut to black" cutaways: the talking-head video is fully covered by
 // an opaque animated explainer scene (its audio keeps playing underneath),
@@ -29,8 +31,15 @@ export const CutawayLayer: React.FC = () => {
             <AbsoluteFill style={{ backgroundColor: "#050505" }}>
               {beat.kind === "zoneCutaway" ? (
                 <ZoneCutaway durationFrames={durationFrames} />
-              ) : (
+              ) : beat.kind === "kcalCutaway" ? (
                 <KcalCutaway durationFrames={durationFrames} />
+              ) : (
+                <FlashCutaway
+                  durationFrames={durationFrames}
+                  text={beat.text}
+                  color={FLASH_COLORS[beat.color]}
+                  icon={beat.icon}
+                />
               )}
             </AbsoluteFill>
           </Sequence>

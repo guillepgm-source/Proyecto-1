@@ -122,65 +122,9 @@ const Runner: React.FC<{ progress: number }> = ({ progress }) => (
   </svg>
 );
 
-const BigX: React.FC<{ progress: number }> = ({ progress }) => (
-  <svg viewBox="0 0 200 200" fill="none">
-    <path
-      d="M34 36 C74 78 122 122 166 164"
-      stroke="#FF4D4D"
-      strokeWidth="20"
-      strokeLinecap="round"
-      {...drawStroke(progress, 190)}
-    />
-    <path
-      d="M166 40 C124 80 78 120 34 162"
-      stroke="#FF4D4D"
-      strokeWidth="20"
-      strokeLinecap="round"
-      {...drawStroke(progress, 190)}
-    />
-  </svg>
-);
-
-const CircleScribble: React.FC<{ progress: number }> = ({ progress }) => (
-  <svg viewBox="0 0 200 200" fill="none">
-    <path
-      d="M100 26 C150 26 176 60 174 100 C172 144 138 174 96 172 C54 170 26 138 28 98 C30 60 56 30 96 28 C104 27 108 33 100 36"
-      stroke="#39FF88"
-      strokeWidth="14"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...drawStroke(progress, 420)}
-    />
-  </svg>
-);
-
-const CheckStamp: React.FC<{ progress: number }> = ({ progress }) => (
-  <svg viewBox="0 0 200 200" fill="none">
-    <circle
-      cx="100"
-      cy="100"
-      r="78"
-      stroke="#33D17A"
-      strokeWidth="10"
-      {...drawStroke(progress, 490)}
-    />
-    <path
-      d="M60 104 C76 118 84 128 92 138 C112 108 128 86 150 62"
-      stroke="#33D17A"
-      strokeWidth="16"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...drawStroke(progress, 150)}
-    />
-  </svg>
-);
-
 const DOODLE_COMPONENTS = {
   wave: Wave,
   runner: Runner,
-  bigX: BigX,
-  circleScribble: CircleScribble,
-  checkStamp: CheckStamp,
 };
 
 export const Doodle: React.FC<{ kind: DoodleBeat["kind"]; frame: number; durationFrames: number }> = ({

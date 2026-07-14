@@ -4,9 +4,9 @@ import { loadFont } from "@remotion/google-fonts/Anton";
 
 const { fontFamily } = loadFont();
 
-// Clean glowing white captions, no per-word highlight chip - the active
-// word instead pops in a bright accent glow, closer to the reference style.
-const ACCENT = "#39FF88";
+// Plain bold white captions with a soft glow, matching the reference's
+// running-caption style exactly - no per-word color highlight, just a
+// punchy scale-pop on the word currently being spoken.
 const WORD_POP_DURATION = 6;
 
 export const CaptionPage: React.FC<{
@@ -125,9 +125,9 @@ export const CaptionPage: React.FC<{
                   display: "inline-block",
                   marginLeft: "0.28em",
                   transform: `scale(${pop})`,
-                  color: isActive ? ACCENT : "white",
+                  color: "white",
                   textShadow: isActive
-                    ? `0 0 16px ${ACCENT}, 0 0 34px ${ACCENT}`
+                    ? "0 0 20px rgba(255,255,255,0.9), 0 6px 22px rgba(0,0,0,0.7)"
                     : undefined,
                   opacity: wasSpoken || isActive ? 1 : 0.78,
                 }}
