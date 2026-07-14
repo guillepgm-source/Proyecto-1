@@ -87,6 +87,7 @@ export const CaptionPage: React.FC<{
           color: "white",
           WebkitTextStroke: `${Math.max(2, fontSize * 0.045)}px black`,
           paintOrder: "stroke fill",
+          textShadow: "0 6px 22px rgba(0,0,0,0.6)",
         }}
       >
         {page.tokens.map((token) => {

@@ -23,10 +23,10 @@ import type { CutSegment } from "./types";
 // pace that also comfortably fits the narrower vertical-strip width.
 const SWITCH_CAPTIONS_EVERY_MS = 380;
 
-// Output is always a fixed 16:9 landscape canvas, regardless of the source
-// footage's own aspect ratio (the source here is a vertical phone clip).
-const CANVAS_WIDTH = 1920;
-const CANVAS_HEIGHT = 1080;
+// Output is a fixed 9:16 vertical canvas (TikTok/Reels format), matching
+// the source footage's own aspect ratio.
+const CANVAS_WIDTH = 1080;
+const CANVAS_HEIGHT = 1920;
 
 export type HormoziEditProps = {
   videoSrc: string;
@@ -69,14 +69,13 @@ export const hormoziEditCalculateMetadata: CalculateMetadataFunction<
   };
 };
 
-// The vertical source is cropped to fill the full 16:9 frame edge-to-edge
-// (no pillarbox). This biases the crop toward the top of the original
-// portrait frame, since that's where the face sits in this selfie footage.
-const VIDEO_OBJECT_POSITION = "50% 20%";
+// The source footage is already 1080x1920 (9:16), so it fills the canvas
+// edge-to-edge with no cropping needed.
+const VIDEO_OBJECT_POSITION = "50% 50%";
 
 // Captions never span the full canvas width - keep a safe margin so text
-// always stays comfortably inside the visible 1920x1080 frame.
-const CAPTION_SAFE_WIDTH = 1500;
+// always stays comfortably inside the visible 1080x1920 frame.
+const CAPTION_SAFE_WIDTH = 900;
 
 export const HormoziEdit: React.FC<HormoziEditProps> = ({
   videoSrc,
