@@ -1,57 +1,6 @@
-// Timing "beats" for graphics and doodle overlays, hand-placed against the
-// real transcript timestamps (post jump-cut timeline, in ms) so everything
-// lands on the word that motivates it.
-
-export type ChecklistBeat = {
-  kind: "checklist";
-  title: string;
-  items: { label: string; atMs: number }[];
-  hideAtMs: number;
-};
-
-export type ZoneChartBeat = {
-  kind: "zoneChart";
-  startMs: number;
-  endMs: number;
-};
-
-export type KcalCompareBeat = {
-  kind: "kcalCompare";
-  startMs: number;
-  endMs: number;
-};
-
-export type ChipBeat = {
-  kind: "chip";
-  startMs: number;
-  endMs: number;
-  icon: string;
-  label: string;
-};
-
-export type GraphicBeat = ChecklistBeat | ZoneChartBeat | KcalCompareBeat | ChipBeat;
-
-export const GRAPHIC_BEATS: GraphicBeat[] = [
-  {
-    kind: "checklist",
-    title: "HOY VERÁS",
-    items: [
-      { label: "Vengo a hacer el capullo", atMs: 1795 },
-      { label: "Me quejo de la sociedad", atMs: 3153 },
-      { label: "Que no cometas errores", atMs: 5154 },
-    ],
-    hideAtMs: 7350,
-  },
-  { kind: "zoneChart", startMs: 37500, endMs: 42450 },
-  { kind: "kcalCompare", startMs: 46280, endMs: 50350 },
-  {
-    kind: "chip",
-    startMs: 52400,
-    endMs: 55550,
-    icon: "⚡",
-    label: "GLUCÓGENO MUSCULAR",
-  },
-];
+// Timing "beats" for graphics, cutaways, doodles and SFX, hand-placed
+// against the real transcript timestamps (post jump-cut timeline, in ms)
+// so everything lands on the word that motivates it.
 
 export type TitleCardBeat = {
   kind: "titleCard";
@@ -71,6 +20,28 @@ export const TITLE_CARD_BEATS: TitleCardBeat[] = [
   },
 ];
 
+// Full-screen "cut to black" explainer scenes: the camera cuts away from
+// the talking-head footage entirely to an animated diagram (arrows, lines,
+// icons) while the narration keeps playing underneath, then cuts back.
+export type ZoneCutawayBeat = {
+  kind: "zoneCutaway";
+  startMs: number;
+  endMs: number;
+};
+
+export type KcalCutawayBeat = {
+  kind: "kcalCutaway";
+  startMs: number;
+  endMs: number;
+};
+
+export type CutawayBeat = ZoneCutawayBeat | KcalCutawayBeat;
+
+export const CUTAWAY_BEATS: CutawayBeat[] = [
+  { kind: "zoneCutaway", startMs: 37350, endMs: 43900 },
+  { kind: "kcalCutaway", startMs: 46150, endMs: 55700 },
+];
+
 export type SfxBeat = {
   src: "whoosh" | "pop" | "tick" | "ding";
   atMs: number;
@@ -78,14 +49,18 @@ export type SfxBeat = {
 };
 
 export const SFX_BEATS: SfxBeat[] = [
-  { src: "whoosh", atMs: 7350 },
-  { src: "pop", atMs: 1535 },
-  { src: "tick", atMs: 19300 },
-  { src: "tick", atMs: 29950 },
-  { src: "pop", atMs: 37500 },
-  { src: "pop", atMs: 46280 },
-  { src: "pop", atMs: 52400 },
-  { src: "ding", atMs: 66450, volume: 0.8 },
+  { src: "whoosh", atMs: 7350, volume: 0.9 },
+  { src: "pop", atMs: 1535, volume: 0.7 },
+  { src: "tick", atMs: 19300, volume: 0.8 },
+  { src: "tick", atMs: 29950, volume: 0.8 },
+  { src: "whoosh", atMs: 37350, volume: 0.9 },
+  { src: "pop", atMs: 38100, volume: 0.75 },
+  { src: "whoosh", atMs: 43900, volume: 0.85 },
+  { src: "whoosh", atMs: 46150, volume: 0.9 },
+  { src: "pop", atMs: 46900, volume: 0.75 },
+  { src: "pop", atMs: 52400, volume: 0.75 },
+  { src: "whoosh", atMs: 55700, volume: 0.85 },
+  { src: "ding", atMs: 66450, volume: 0.85 },
 ];
 
 export type DoodleBeat = {
@@ -99,6 +74,5 @@ export const DOODLE_BEATS: DoodleBeat[] = [
   { kind: "wave", startMs: 0, endMs: 950, side: "right" },
   { kind: "runner", startMs: 19300, endMs: 20550, side: "left" },
   { kind: "bigX", startMs: 29950, endMs: 30950, side: "right" },
-  { kind: "circleScribble", startMs: 36000, endMs: 37450, side: "left" },
   { kind: "checkStamp", startMs: 66450, endMs: 67900, side: "right" },
 ];

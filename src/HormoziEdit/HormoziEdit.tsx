@@ -10,7 +10,7 @@ import { createTikTokStyleCaptions, type Caption } from "@remotion/captions";
 import { JumpCutVideo } from "./JumpCutVideo";
 import { CaptionOverlay } from "./CaptionOverlay";
 import { DoodleLayer } from "./DoodleLayer";
-import { GraphicsLayer } from "./GraphicsLayer";
+import { CutawayLayer, isCutawayActive } from "./CutawayLayer";
 import { TitleCardLayer } from "./TitleCardLayer";
 import { SfxLayer } from "./SfxLayer";
 import {
@@ -102,6 +102,8 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   const titleCardActive = TITLE_CARD_BEATS.some(
     (beat) => nowMs >= beat.startMs - 150 && nowMs < beat.endMs,
   );
+  const cutawayActive = isCutawayActive(nowMs);
+  const hideRunningCaptions = titleCardActive || cutawayActive;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
@@ -134,13 +136,14 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
       />
 
       <DoodleLayer />
-      <GraphicsLayer />
       <TitleCardLayer />
       <SfxLayer />
 
-      <AbsoluteFill style={{ opacity: titleCardActive ? 0 : 1 }}>
+      <AbsoluteFill style={{ opacity: hideRunningCaptions ? 0 : 1 }}>
         <CaptionOverlay pages={pages} containerWidth={captionWidth} />
       </AbsoluteFill>
+
+      <CutawayLayer />
 
       <AbsoluteFill
         style={{ backgroundColor: "white", opacity: flashOpacity }}

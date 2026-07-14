@@ -1,0 +1,322 @@
+import { Easing, interpolate, useCurrentFrame } from "remotion";
+import { loadFont } from "@remotion/google-fonts/PressStart2P";
+
+const { fontFamily: pixelFont } = loadFont();
+
+const ACCENT = "#39FF88";
+const RED = "#FF4D4D";
+
+const useSceneMotion = (durationFrames: number) => {
+  const frame = useCurrentFrame();
+  const enter = interpolate(frame, [0, 10], [0, 1], {
+    easing: Easing.out(Easing.cubic),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const exit = interpolate(frame, [durationFrames - 10, durationFrames], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return { frame, enter, exit };
+};
+
+// A hand-drawn-style arrow used throughout the cutaways to point at the
+// thing being talked about, matching the connector-line motif from the
+// caption/graphics layers.
+const Arrow: React.FC<{ progress: number; rotate?: number; length?: number; color?: string }> = ({
+  progress,
+  rotate = 0,
+  length = 90,
+  color = ACCENT,
+}) => (
+  <svg
+    width={length}
+    height={40}
+    viewBox="0 0 90 40"
+    style={{ transform: `rotate(${rotate}deg)`, overflow: "visible" }}
+  >
+    <path
+      d="M2 20 H78"
+      stroke={color}
+      strokeWidth="5"
+      strokeLinecap="round"
+      strokeDasharray={80}
+      strokeDashoffset={interpolate(progress, [0, 1], [80, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
+    />
+    <path
+      d="M60 4 L82 20 L60 36"
+      stroke={color}
+      strokeWidth="5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+      opacity={interpolate(progress, [0.7, 1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
+    />
+  </svg>
+);
+
+const HeartIcon: React.FC<{ scale: number }> = ({ scale }) => (
+  <svg width={64} height={58} viewBox="0 0 64 58" style={{ transform: `scale(${scale})` }}>
+    <path
+      d="M32 54 C10 38 2 26 2 15 C2 5 10 0 18 0 C25 0 30 4 32 10 C34 4 39 0 46 0 C54 0 62 5 62 15 C62 26 54 38 32 54 Z"
+      fill={ACCENT}
+      opacity={0.92}
+    />
+  </svg>
+);
+
+// Original line-icon (not an emoji glyph) used on the glucógeno chip.
+const BoltIcon: React.FC<{ size?: number; color?: string }> = ({ size = 22, color = ACCENT }) => (
+  <svg width={size} height={size * 1.3} viewBox="0 0 20 26" fill="none">
+    <path d="M11 0 L1 15 H9 L7 26 L19 9 H10 Z" fill={color} />
+  </svg>
+);
+
+const SectionHeader: React.FC<{ children: React.ReactNode; enter: number }> = ({ children, enter }) => (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      opacity: enter,
+      transform: `translateY(${interpolate(enter, [0, 1], [-20, 0])}px)`,
+    }}
+  >
+    <div
+      style={{
+        width: 3,
+        height: 46,
+        background: ACCENT,
+        boxShadow: `0 0 12px ${ACCENT}`,
+        marginBottom: 10,
+      }}
+    />
+    <div
+      style={{
+        fontFamily: pixelFont,
+        fontSize: 30,
+        color: ACCENT,
+        textShadow: `0 0 14px ${ACCENT}, 0 0 30px ${ACCENT}`,
+        textAlign: "center",
+        lineHeight: 1.6,
+      }}
+    >
+      {children}
+    </div>
+  </div>
+);
+
+const ZONES = [
+  { label: "Z1", h: 30 },
+  { label: "Z2", h: 60 },
+  { label: "Z3", h: 90 },
+  { label: "Z4", h: 122 },
+  { label: "Z5", h: 156 },
+];
+
+export const ZoneCutaway: React.FC<{ durationFrames: number }> = ({ durationFrames }) => {
+  const { frame, enter, exit } = useSceneMotion(durationFrames);
+  const heartScale = 1 + Math.sin(frame / 5) * 0.08;
+  const barsIn = interpolate(frame, [10, 30], [0, 1], {
+    easing: Easing.out(Easing.cubic),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const pulse = 1 + Math.sin(frame / 4) * 0.05;
+  const arrowProgress = interpolate(frame, [22, 34], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 26,
+        opacity: enter * exit,
+      }}
+    >
+      <div style={{ opacity: enter }}>
+        <HeartIcon scale={heartScale} />
+      </div>
+
+      <SectionHeader enter={enter}>ZONA 2 · 130–150 PPM</SectionHeader>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          gap: 14,
+          height: 170,
+          transform: `scale(${barsIn})`,
+          transformOrigin: "bottom",
+        }}
+      >
+        {ZONES.map((z, i) => {
+          const isZone2 = i === 1;
+          return (
+            <div key={z.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+              <div
+                style={{
+                  width: 46,
+                  height: z.h * (isZone2 ? pulse : 1),
+                  background: isZone2 ? ACCENT : "rgba(255,255,255,0.16)",
+                  border: isZone2 ? "none" : "1px solid rgba(255,255,255,0.3)",
+                  borderRadius: 6,
+                  boxShadow: isZone2 ? `0 0 26px ${ACCENT}` : undefined,
+                }}
+              />
+              <div
+                style={{
+                  fontFamily: pixelFont,
+                  fontSize: 15,
+                  color: isZone2 ? ACCENT : "rgba(255,255,255,0.55)",
+                }}
+              >
+                {z.label}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 14, opacity: interpolate(frame, [20, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+        <Arrow progress={arrowProgress} rotate={180} length={70} />
+        <div
+          style={{
+            fontFamily: "system-ui, sans-serif",
+            fontWeight: 700,
+            fontSize: 26,
+            color: "white",
+            textShadow: "0 4px 16px rgba(0,0,0,0.7)",
+            maxWidth: 460,
+            textAlign: "center",
+          }}
+        >
+          Aquí quemas grasa,
+          <br />
+          no en zona 5
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Bar: React.FC<{
+  label: string;
+  value: string;
+  sub: string;
+  pct: number;
+  color: string;
+  grow: number;
+  delay: number;
+}> = ({ label, value, sub, pct, color, grow, delay }) => {
+  const localGrow = interpolate(grow, [delay, delay + 0.35], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return (
+    <div style={{ width: 560 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+        <span style={{ fontFamily: "system-ui, sans-serif", fontWeight: 700, fontSize: 26, color: "white" }}>
+          {label}
+        </span>
+        <span style={{ fontFamily: pixelFont, fontSize: 20, color }}>{value}</span>
+      </div>
+      <div
+        style={{
+          height: 30,
+          background: "rgba(255,255,255,0.12)",
+          borderRadius: 15,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            width: `${pct * localGrow}%`,
+            background: color,
+            boxShadow: `0 0 18px ${color}`,
+            borderRadius: 15,
+          }}
+        />
+      </div>
+      <div style={{ fontFamily: "system-ui, sans-serif", fontSize: 18, opacity: 0.7, color: "white", marginTop: 6 }}>
+        {sub}
+      </div>
+    </div>
+  );
+};
+
+export const KcalCutaway: React.FC<{ durationFrames: number }> = ({ durationFrames }) => {
+  const { frame, enter, exit } = useSceneMotion(durationFrames);
+  const grow = interpolate(frame, [8, 60], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const chipIn = interpolate(frame, [70, 90], [0, 1], {
+    easing: Easing.out(Easing.back(2)),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 34,
+        opacity: enter * exit,
+      }}
+    >
+      <SectionHeader enter={enter}>MENOS ES MÁS</SectionHeader>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+        <Bar
+          label="3H de cinta"
+          value="~600 KCAL"
+          sub="glucógeno muscular"
+          pct={100}
+          color={RED}
+          grow={grow}
+          delay={0}
+        />
+        <Bar
+          label="Zona 2"
+          value="250–300 KCAL"
+          sub="grasa real"
+          pct={48}
+          color={ACCENT}
+          grow={grow}
+          delay={0.25}
+        />
+      </div>
+
+      <div
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "14px 26px",
+          borderRadius: 999,
+          background: "rgba(8,10,10,0.82)",
+          border: `2px solid ${ACCENT}`,
+          boxShadow: `0 0 24px rgba(57,255,136,0.25)`,
+          color: "white",
+          fontFamily: pixelFont,
+          fontSize: 18,
+          transform: `scale(${chipIn})`,
+        }}
+      >
+        <BoltIcon />
+        GLUCÓGENO MUSCULAR
+      </div>
+    </div>
+  );
+};
