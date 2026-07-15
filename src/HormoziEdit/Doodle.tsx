@@ -1,7 +1,11 @@
 import { Easing, interpolate } from "remotion";
+import { loadFont } from "@remotion/google-fonts/Anton";
 import type { DoodleBeat } from "./beats";
 
+const { fontFamily } = loadFont();
+
 const INK = "#111111";
+const ACCENT = "#39FF88";
 
 // Original hand-drawn-style marker doodles (no external assets), each drawn
 // with a "draw-on" stroke reveal followed by a snappy pop, mimicking the
@@ -122,13 +126,33 @@ const Runner: React.FC<{ progress: number }> = ({ progress }) => (
   </svg>
 );
 
+// A quick circled-numeral badge (drawn-on ring + snap-in digit) for rapid
+// "1, 2, 3" style list beats - a lightweight background accent, not a
+// full cutaway.
+const CounterBadge: React.FC<{ progress: number; label: string }> = ({ progress, label }) => (
+  <svg viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="100" r="72" stroke={ACCENT} strokeWidth="10" {...drawStroke(progress, 452)} />
+    <text
+      x="100"
+      y="134"
+      textAnchor="middle"
+      fontFamily={fontFamily}
+      fontSize="92"
+      fill="white"
+      style={{ textShadow: "0 0 16px rgba(0,0,0,0.6)" }}
+    >
+      {label}
+    </text>
+  </svg>
+);
+
 const DOODLE_COMPONENTS = {
   wave: Wave,
   runner: Runner,
 };
 
-export const Doodle: React.FC<{ kind: DoodleBeat["kind"]; frame: number; durationFrames: number }> = ({
-  kind,
+export const Doodle: React.FC<{ beat: DoodleBeat; frame: number; durationFrames: number }> = ({
+  beat,
   frame,
   durationFrames,
 }) => {
@@ -145,11 +169,16 @@ export const Doodle: React.FC<{ kind: DoodleBeat["kind"]; frame: number; duratio
     extrapolateRight: "clamp",
   });
 
-  const Component = DOODLE_COMPONENTS[kind];
-
   return (
     <DoodleShell progress={enter} exit={exit} rotate={wobble}>
-      <Component progress={enter} />
+      {beat.kind === "counter" ? (
+        <CounterBadge progress={enter} label={beat.label} />
+      ) : (
+        (() => {
+          const Component = DOODLE_COMPONENTS[beat.kind];
+          return <Component progress={enter} />;
+        })()
+      )}
     </DoodleShell>
   );
 };

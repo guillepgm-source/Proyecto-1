@@ -51,6 +51,21 @@ export type CutawayBeat = ZoneCutawayBeat | KcalCutawayBeat | FlashCutawayBeat;
 export const CUTAWAY_BEATS: CutawayBeat[] = [
   {
     kind: "flashCutaway",
+    startMs: 5579,
+    endMs: 6350,
+    text: "0 ERRORES",
+    color: "red",
+    icon: "x",
+  },
+  {
+    kind: "flashCutaway",
+    startMs: 19182,
+    endMs: 19850,
+    text: "3 HORAS",
+    color: "red",
+  },
+  {
+    kind: "flashCutaway",
     startMs: 20550,
     endMs: 21850,
     text: "~600 KCAL",
@@ -98,6 +113,12 @@ export type SfxBeat = {
 export const SFX_BEATS: SfxBeat[] = [
   { src: "whoosh", atMs: 7350, volume: 0.9 },
   { src: "pop", atMs: 1535, volume: 0.7 },
+  { src: "pop", atMs: 1795, volume: 0.65 },
+  { src: "pop", atMs: 3153, volume: 0.65 },
+  { src: "pop", atMs: 5154, volume: 0.65 },
+  { src: "tick", atMs: 5579, volume: 0.8 },
+  { src: "tick", atMs: 12769, volume: 0.7 },
+  { src: "tick", atMs: 19182, volume: 0.85 },
   { src: "tick", atMs: 19300, volume: 0.8 },
   { src: "whoosh", atMs: 20550, volume: 0.85 },
   { src: "whoosh", atMs: 37350, volume: 0.9 },
@@ -113,14 +134,18 @@ export const SFX_BEATS: SfxBeat[] = [
   { src: "ding", atMs: 66400, volume: 0.9 },
 ];
 
-export type DoodleBeat = {
-  kind: "wave" | "runner";
-  startMs: number;
-  endMs: number;
-  side: "left" | "right";
-};
+export type DoodleBeat =
+  | { kind: "wave" | "runner"; startMs: number; endMs: number; side: "left" | "right" }
+  | { kind: "counter"; startMs: number; endMs: number; side: "left" | "right"; label: string };
 
+// Kept intentionally light-touch (small corner accents, not full takeovers)
+// to fill the otherwise-bare opening stretch without competing with the
+// bigger cutaway beats.
 export const DOODLE_BEATS: DoodleBeat[] = [
   { kind: "wave", startMs: 0, endMs: 950, side: "right" },
-  { kind: "runner", startMs: 19300, endMs: 20500, side: "left" },
+  { kind: "counter", startMs: 1795, endMs: 2655, side: "left", label: "1" },
+  { kind: "counter", startMs: 3153, endMs: 3929, side: "right", label: "2" },
+  { kind: "counter", startMs: 5154, endMs: 5900, side: "left", label: "3" },
+  { kind: "runner", startMs: 12769, endMs: 13692, side: "right" },
+  { kind: "runner", startMs: 19850, endMs: 20500, side: "left" },
 ];

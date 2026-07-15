@@ -5,10 +5,9 @@ import { getHighlightColor } from "./highlightWords";
 
 const { fontFamily } = loadFont();
 
-// Bold left-anchored captions matching devinjatho's format exactly: plain
-// words stay in natural sentence case, a handful of key words are
-// capitalized and colored (red/green) for emphasis, and the whole block
-// sits lower-left instead of centered.
+// Bold centered captions, natural sentence case, with a handful of key
+// words capitalized and colored (red/green) for emphasis. Positioned in the
+// upper-middle band so it never competes with the lower-third cutaway UI.
 const WORD_POP_DURATION = 6;
 
 export const CaptionPage: React.FC<{
@@ -70,10 +69,10 @@ export const CaptionPage: React.FC<{
     <div
       style={{
         position: "absolute",
-        left: "8%",
-        right: "12%",
-        top: "68%",
-        textAlign: "left",
+        left: "9%",
+        right: "9%",
+        top: "52%",
+        textAlign: "center",
       }}
     >
       <div
@@ -81,11 +80,11 @@ export const CaptionPage: React.FC<{
           fontFamily,
           fontSize,
           lineHeight: 1.12,
-          textAlign: "left",
+          textAlign: "center",
           whiteSpace: "pre-wrap",
           overflowWrap: "break-word",
           transform: `scale(${enter * exit}) translateY(${enterY + exitY}px)`,
-          transformOrigin: "left center",
+          transformOrigin: "center center",
           opacity: exit,
           color: "white",
           WebkitTextStroke: "1px rgba(0,0,0,0.55)",

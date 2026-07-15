@@ -34,7 +34,7 @@ export const DoodleLayer: React.FC = () => {
               }}
             >
               <div style={{ width: 150 }}>
-                <DoodleFrameReader kind={beat.kind} durationFrames={durationFrames} />
+                <DoodleFrameReader beat={beat} durationFrames={durationFrames} />
               </div>
             </AbsoluteFill>
           </Sequence>
@@ -45,10 +45,10 @@ export const DoodleLayer: React.FC = () => {
 };
 
 // Small wrapper so Doodle can read the current frame relative to its own Sequence.
-const DoodleFrameReader: React.FC<{ kind: DoodleBeat["kind"]; durationFrames: number }> = ({
-  kind,
+const DoodleFrameReader: React.FC<{ beat: DoodleBeat; durationFrames: number }> = ({
+  beat,
   durationFrames,
 }) => {
   const frame = useCurrentFrame();
-  return <Doodle kind={kind} frame={frame} durationFrames={durationFrames} />;
+  return <Doodle beat={beat} frame={frame} durationFrames={durationFrames} />;
 };
