@@ -358,6 +358,106 @@ export const ArrowCutaway: React.FC<{
   );
 };
 
+// Plain outline body silhouette - the "before" state.
+const BodyBefore: React.FC = () => (
+  <svg width={92} height={150} viewBox="0 0 100 160" fill="none">
+    <circle cx="50" cy="20" r="16" stroke="white" strokeWidth="5" opacity={0.9} />
+    <path
+      d="M30 45 Q50 35 70 45 L66 110 Q50 118 34 110 Z"
+      stroke="white"
+      strokeWidth="5"
+      fill="rgba(255,255,255,0.08)"
+      opacity={0.9}
+    />
+    <rect x="38" y="106" width="10" height="46" rx="5" fill="white" opacity={0.9} />
+    <rect x="52" y="106" width="10" height="46" rx="5" fill="white" opacity={0.9} />
+  </svg>
+);
+
+// Filled, broader-shouldered silhouette with an accent glow - the "after",
+// achieved state the arrow lands on.
+const BodyAfter: React.FC = () => (
+  <svg width={110} height={162} viewBox="0 0 100 160" fill="none">
+    <circle cx="50" cy="20" r="16" fill={ACCENT} />
+    <path d="M22 48 Q50 28 78 48 L70 108 Q50 120 30 108 Z" fill={ACCENT} />
+    <rect x="35" y="104" width="13" height="50" rx="6" fill={ACCENT} />
+    <rect x="52" y="104" width="13" height="50" rx="6" fill={ACCENT} />
+  </svg>
+);
+
+// The "before icon -> arrow forms -> after icon" beat: a body silhouette,
+// a hand-drawn arrow that visibly draws itself on (paired with a ticking
+// build-up SFX), landing on a bigger, glowing "achieved" silhouette.
+export const TransformCutaway: React.FC<{
+  durationFrames: number;
+  label: string;
+}> = ({ durationFrames, label }) => {
+  const { frame, enter, exit } = useSceneMotion(durationFrames);
+  const beforeIn = interpolate(frame, [0, 8], [0, 1], {
+    easing: Easing.out(Easing.cubic),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const arrowProgress = interpolate(frame, [9, 22], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const afterIn = interpolate(frame, [20, 30], [0, 1], {
+    easing: Easing.out(Easing.back(2.5)),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const glow = interpolate(frame, [20, 27, 36], [0, 26, 14], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 30,
+        opacity: enter * exit,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+        <div style={{ opacity: beforeIn, transform: `scale(${beforeIn})` }}>
+          <BodyBefore />
+        </div>
+        <div style={{ transform: "scale(2.3)" }}>
+          <Arrow progress={arrowProgress} color={ACCENT} />
+        </div>
+        <div
+          style={{
+            opacity: afterIn,
+            transform: `scale(${afterIn})`,
+            filter: `drop-shadow(0 0 ${glow}px ${ACCENT})`,
+          }}
+        >
+          <BodyAfter />
+        </div>
+      </div>
+      <div
+        style={{
+          fontFamily: boldFont,
+          fontSize: 40,
+          color: ACCENT,
+          textShadow: `0 0 18px ${ACCENT}, 0 0 36px ${ACCENT}`,
+          textAlign: "center",
+          lineHeight: 1.4,
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
+};
+
 const CheckIcon: React.FC<{ size?: number }> = ({ size = 70 }) => (
   <svg width={size} height={size} viewBox="0 0 70 70" fill="none">
     <path

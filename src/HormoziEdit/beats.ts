@@ -55,11 +55,21 @@ export type ArrowCutawayBeat = {
   rotate?: number;
 };
 
+// Before-icon -> arrow forms (with a ticking build-up SFX) -> after-icon,
+// for lines that describe a transformation/result.
+export type TransformCutawayBeat = {
+  kind: "transformCutaway";
+  startMs: number;
+  endMs: number;
+  label: string;
+};
+
 export type CutawayBeat =
   | ZoneCutawayBeat
   | KcalCutawayBeat
   | FlashCutawayBeat
-  | ArrowCutawayBeat;
+  | ArrowCutawayBeat
+  | TransformCutawayBeat;
 
 // Kept short and snappy (1.3-2.5s each) - real quick camera cuts, not long
 // takeovers, spread across more moments instead of two long ones.
@@ -85,6 +95,12 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
     endMs: 21850,
     text: "~600 KCAL",
     color: "red",
+  },
+  {
+    kind: "transformCutaway",
+    startMs: 34386,
+    endMs: 36950,
+    label: "MÁQUINA PERFECTA",
   },
   { kind: "zoneCutaway", startMs: 37350, endMs: 39550 },
   {
@@ -136,7 +152,7 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
 ];
 
 export type SfxBeat = {
-  src: "whoosh" | "pop" | "tick" | "ding";
+  src: "whoosh" | "pop" | "tick" | "ding" | "buildup";
   atMs: number;
   volume?: number;
 };
@@ -152,16 +168,17 @@ export const SFX_BEATS: SfxBeat[] = [
   { src: "tick", atMs: 19182, volume: 0.85 },
   { src: "tick", atMs: 19300, volume: 0.8 },
   { src: "whoosh", atMs: 20550, volume: 0.85 },
+  { src: "buildup", atMs: 34686, volume: 0.85 },
   { src: "whoosh", atMs: 37350, volume: 0.9 },
   { src: "pop", atMs: 38100, volume: 0.75 },
   { src: "whoosh", atMs: 39550, volume: 0.8 },
   { src: "tick", atMs: 29800, volume: 0.85 },
+  { src: "tick", atMs: 42868, volume: 0.8 },
   { src: "whoosh", atMs: 46150, volume: 0.9 },
   { src: "pop", atMs: 46900, volume: 0.75 },
   { src: "pop", atMs: 47800, volume: 0.75 },
   { src: "whoosh", atMs: 48600, volume: 0.8 },
-  { src: "tick", atMs: 52350, volume: 0.85 },
-  { src: "tick", atMs: 62700, volume: 0.85 },
+  { src: "tick", atMs: 62625, volume: 0.85 },
   { src: "ding", atMs: 66400, volume: 0.9 },
 ];
 
