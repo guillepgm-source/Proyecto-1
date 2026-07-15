@@ -44,31 +44,22 @@ export type FlashCutawayBeat = {
   icon?: "x" | "check";
 };
 
-// A full-screen cut to a big hand-drawn-style arrow + short label, the core
-// "camera cut to a drawing" beat from the reference edit.
-export type ArrowCutawayBeat = {
-  kind: "arrowCutaway";
-  startMs: number;
-  endMs: number;
-  label: string;
-  color: "red" | "green";
-  rotate?: number;
-};
-
 // Before-icon -> arrow forms (with a ticking build-up SFX) -> after-icon,
-// for lines that describe a transformation/result.
+// for lines that describe a transformation/result - the main "camera cut to
+// a drawing" beat, more legible than a bare floating arrow+label.
 export type TransformCutawayBeat = {
   kind: "transformCutaway";
   startMs: number;
   endMs: number;
   label: string;
+  after?: "body" | "check" | "x" | "heart";
+  color?: "red" | "green";
 };
 
 export type CutawayBeat =
   | ZoneCutawayBeat
   | KcalCutawayBeat
   | FlashCutawayBeat
-  | ArrowCutawayBeat
   | TransformCutawayBeat;
 
 // Kept short and snappy (1.3-2.5s each) - real quick camera cuts, not long
@@ -101,6 +92,8 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
     startMs: 34386,
     endMs: 36950,
     label: "MÁQUINA PERFECTA",
+    after: "body",
+    color: "green",
   },
   { kind: "zoneCutaway", startMs: 37350, endMs: 39550 },
   {
@@ -112,33 +105,36 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
     icon: "x",
   },
   {
-    kind: "arrowCutaway",
+    kind: "transformCutaway",
     startMs: 12769,
-    endMs: 13692,
+    endMs: 14419,
     label: "CARDIO",
+    after: "heart",
     color: "green",
   },
   {
-    kind: "arrowCutaway",
+    kind: "transformCutaway",
     startMs: 42868,
     endMs: 45636,
     label: "INTELIGENTE",
+    after: "check",
     color: "green",
   },
   { kind: "kcalCutaway", startMs: 46150, endMs: 48600 },
   {
-    kind: "arrowCutaway",
+    kind: "transformCutaway",
     startMs: 48600,
     endMs: 50513,
     label: "GRASA REAL",
+    after: "body",
     color: "green",
-    rotate: 180,
   },
   {
-    kind: "arrowCutaway",
+    kind: "transformCutaway",
     startMs: 62625,
     endMs: 64022,
     label: "FRUSTRACIÓN",
+    after: "x",
     color: "red",
   },
   {
@@ -164,21 +160,21 @@ export const SFX_BEATS: SfxBeat[] = [
   { src: "pop", atMs: 3153, volume: 0.65 },
   { src: "pop", atMs: 5154, volume: 0.65 },
   { src: "tick", atMs: 5579, volume: 0.8 },
-  { src: "tick", atMs: 12769, volume: 0.7 },
+  { src: "buildup", atMs: 13069, volume: 0.8 },
   { src: "tick", atMs: 19182, volume: 0.85 },
-  { src: "tick", atMs: 19300, volume: 0.8 },
   { src: "whoosh", atMs: 20550, volume: 0.85 },
   { src: "buildup", atMs: 34686, volume: 0.85 },
   { src: "whoosh", atMs: 37350, volume: 0.9 },
   { src: "pop", atMs: 38100, volume: 0.75 },
   { src: "whoosh", atMs: 39550, volume: 0.8 },
   { src: "tick", atMs: 29800, volume: 0.85 },
-  { src: "tick", atMs: 42868, volume: 0.8 },
+  { src: "buildup", atMs: 43168, volume: 0.8 },
   { src: "whoosh", atMs: 46150, volume: 0.9 },
   { src: "pop", atMs: 46900, volume: 0.75 },
   { src: "pop", atMs: 47800, volume: 0.75 },
   { src: "whoosh", atMs: 48600, volume: 0.8 },
-  { src: "tick", atMs: 62625, volume: 0.85 },
+  { src: "buildup", atMs: 48900, volume: 0.75 },
+  { src: "buildup", atMs: 62925, volume: 0.8 },
   { src: "ding", atMs: 66400, volume: 0.9 },
 ];
 

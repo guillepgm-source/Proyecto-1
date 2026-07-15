@@ -55,11 +55,20 @@ const Arrow: React.FC<{ progress: number; rotate?: number; length?: number; colo
   </svg>
 );
 
-const HeartIcon: React.FC<{ scale: number }> = ({ scale }) => (
-  <svg width={64} height={58} viewBox="0 0 64 58" style={{ transform: `scale(${scale})` }}>
+const HeartIcon: React.FC<{ scale: number; color?: string; size?: number }> = ({
+  scale,
+  color = ACCENT,
+  size = 64,
+}) => (
+  <svg
+    width={size}
+    height={size * 0.906}
+    viewBox="0 0 64 58"
+    style={{ transform: `scale(${scale})` }}
+  >
     <path
       d="M32 54 C10 38 2 26 2 15 C2 5 10 0 18 0 C25 0 30 4 32 10 C34 4 39 0 46 0 C54 0 62 5 62 15 C62 26 54 38 32 54 Z"
-      fill={ACCENT}
+      fill={color}
       opacity={0.92}
     />
   </svg>
@@ -247,10 +256,10 @@ const Bar: React.FC<{
 };
 
 // Original X-mark icon (not an emoji) for the quick rejection flash.
-const XIcon: React.FC<{ size?: number }> = ({ size = 70 }) => (
+const XIcon: React.FC<{ size?: number; color?: string }> = ({ size = 70, color = RED }) => (
   <svg width={size} height={size} viewBox="0 0 70 70" fill="none">
-    <path d="M8 8 L62 62" stroke={RED} strokeWidth="10" strokeLinecap="round" />
-    <path d="M62 8 L8 62" stroke={RED} strokeWidth="10" strokeLinecap="round" />
+    <path d="M8 8 L62 62" stroke={color} strokeWidth="10" strokeLinecap="round" />
+    <path d="M62 8 L8 62" stroke={color} strokeWidth="10" strokeLinecap="round" />
   </svg>
 );
 
@@ -311,53 +320,6 @@ export const FlashCutaway: React.FC<{
   );
 };
 
-// A full-screen "camera cut to a drawing" beat: a big animated arrow plus a
-// short bold label, on black - the core Devin Jhato transition motif, sized
-// to actually be seen instead of a small corner accent.
-export const ArrowCutaway: React.FC<{
-  durationFrames: number;
-  label: string;
-  color: string;
-  rotate?: number;
-}> = ({ durationFrames, label, color, rotate = 0 }) => {
-  const { frame, enter, exit } = useSceneMotion(durationFrames);
-  const arrowProgress = interpolate(frame, [4, 14], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 30,
-        opacity: enter * exit,
-      }}
-    >
-      <div style={{ transform: `scale(3.1)` }}>
-        <Arrow progress={arrowProgress} rotate={rotate} color={color} />
-      </div>
-      <div
-        style={{
-          fontFamily: boldFont,
-          fontSize: 44,
-          color,
-          textShadow: `0 0 18px ${color}, 0 0 36px ${color}`,
-          textAlign: "center",
-          lineHeight: 1.4,
-        }}
-      >
-        {label}
-      </div>
-    </div>
-  );
-};
-
 // Plain outline body silhouette - the "before" state.
 const BodyBefore: React.FC = () => (
   <svg width={92} height={150} viewBox="0 0 100 160" fill="none">
@@ -374,24 +336,34 @@ const BodyBefore: React.FC = () => (
   </svg>
 );
 
-// Filled, broader-shouldered silhouette with an accent glow - the "after",
-// achieved state the arrow lands on.
-const BodyAfter: React.FC = () => (
+// Filled, broader-shouldered silhouette with a glow - the "after", achieved
+// state the arrow lands on.
+const BodyAfter: React.FC<{ color: string }> = ({ color }) => (
   <svg width={110} height={162} viewBox="0 0 100 160" fill="none">
-    <circle cx="50" cy="20" r="16" fill={ACCENT} />
-    <path d="M22 48 Q50 28 78 48 L70 108 Q50 120 30 108 Z" fill={ACCENT} />
-    <rect x="35" y="104" width="13" height="50" rx="6" fill={ACCENT} />
-    <rect x="52" y="104" width="13" height="50" rx="6" fill={ACCENT} />
+    <circle cx="50" cy="20" r="16" fill={color} />
+    <path d="M22 48 Q50 28 78 48 L70 108 Q50 120 30 108 Z" fill={color} />
+    <rect x="35" y="104" width="13" height="50" rx="6" fill={color} />
+    <rect x="52" y="104" width="13" height="50" rx="6" fill={color} />
   </svg>
 );
 
+const TRANSFORM_AFTER_ICONS = {
+  body: (color: string) => <BodyAfter color={color} />,
+  check: (color: string) => <CheckIcon size={100} color={color} />,
+  x: (color: string) => <XIcon size={100} color={color} />,
+  heart: (color: string) => <HeartIcon scale={1.7} color={color} />,
+};
+
 // The "before icon -> arrow forms -> after icon" beat: a body silhouette,
 // a hand-drawn arrow that visibly draws itself on (paired with a ticking
-// build-up SFX), landing on a bigger, glowing "achieved" silhouette.
+// build-up SFX), landing on a bigger, glowing "result" icon - the payoff
+// visual for a line that lands on an outcome, good or bad.
 export const TransformCutaway: React.FC<{
   durationFrames: number;
   label: string;
-}> = ({ durationFrames, label }) => {
+  after?: keyof typeof TRANSFORM_AFTER_ICONS;
+  color?: string;
+}> = ({ durationFrames, label, after = "body", color = ACCENT }) => {
   const { frame, enter, exit } = useSceneMotion(durationFrames);
   const beforeIn = interpolate(frame, [0, 8], [0, 1], {
     easing: Easing.out(Easing.cubic),
@@ -430,24 +402,24 @@ export const TransformCutaway: React.FC<{
           <BodyBefore />
         </div>
         <div style={{ transform: "scale(2.3)" }}>
-          <Arrow progress={arrowProgress} color={ACCENT} />
+          <Arrow progress={arrowProgress} color={color} />
         </div>
         <div
           style={{
             opacity: afterIn,
             transform: `scale(${afterIn})`,
-            filter: `drop-shadow(0 0 ${glow}px ${ACCENT})`,
+            filter: `drop-shadow(0 0 ${glow}px ${color})`,
           }}
         >
-          <BodyAfter />
+          {TRANSFORM_AFTER_ICONS[after](color)}
         </div>
       </div>
       <div
         style={{
           fontFamily: boldFont,
           fontSize: 40,
-          color: ACCENT,
-          textShadow: `0 0 18px ${ACCENT}, 0 0 36px ${ACCENT}`,
+          color,
+          textShadow: `0 0 18px ${color}, 0 0 36px ${color}`,
           textAlign: "center",
           lineHeight: 1.4,
         }}
@@ -458,11 +430,11 @@ export const TransformCutaway: React.FC<{
   );
 };
 
-const CheckIcon: React.FC<{ size?: number }> = ({ size = 70 }) => (
+const CheckIcon: React.FC<{ size?: number; color?: string }> = ({ size = 70, color = ACCENT }) => (
   <svg width={size} height={size} viewBox="0 0 70 70" fill="none">
     <path
       d="M14 36 L28 50 L56 18"
-      stroke={ACCENT}
+      stroke={color}
       strokeWidth="10"
       strokeLinecap="round"
       strokeLinejoin="round"
