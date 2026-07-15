@@ -311,6 +311,53 @@ export const FlashCutaway: React.FC<{
   );
 };
 
+// A full-screen "camera cut to a drawing" beat: a big animated arrow plus a
+// short bold label, on black - the core Devin Jhato transition motif, sized
+// to actually be seen instead of a small corner accent.
+export const ArrowCutaway: React.FC<{
+  durationFrames: number;
+  label: string;
+  color: string;
+  rotate?: number;
+}> = ({ durationFrames, label, color, rotate = 0 }) => {
+  const { frame, enter, exit } = useSceneMotion(durationFrames);
+  const arrowProgress = interpolate(frame, [4, 14], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 30,
+        opacity: enter * exit,
+      }}
+    >
+      <div style={{ transform: `scale(3.1)` }}>
+        <Arrow progress={arrowProgress} rotate={rotate} color={color} />
+      </div>
+      <div
+        style={{
+          fontFamily: boldFont,
+          fontSize: 44,
+          color,
+          textShadow: `0 0 18px ${color}, 0 0 36px ${color}`,
+          textAlign: "center",
+          lineHeight: 1.4,
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
+};
+
 const CheckIcon: React.FC<{ size?: number }> = ({ size = 70 }) => (
   <svg width={size} height={size} viewBox="0 0 70 70" fill="none">
     <path

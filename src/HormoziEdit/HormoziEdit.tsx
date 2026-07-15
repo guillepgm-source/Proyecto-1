@@ -19,7 +19,6 @@ import {
   getPunchRotation,
   getZoomPunchScale,
 } from "./zoomPunch";
-import { FreezeZoomLayer } from "./FreezeZoomLayer";
 import type { CutSegment } from "./types";
 import { TITLE_CARD_BEATS } from "./beats";
 
@@ -134,12 +133,6 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
           background:
             "linear-gradient(to bottom, rgba(0,0,0,0) 42%, rgba(0,0,0,0.5) 76%, rgba(0,0,0,0.62) 100%)",
         }}
-      />
-
-      <FreezeZoomLayer
-        videoSrc={videoSrc}
-        cutlist={cutlist}
-        objectPosition={VIDEO_OBJECT_POSITION}
       />
 
       <DoodleLayer />

@@ -25,10 +25,10 @@ const DoodleShell: React.FC<{
   return (
     <div
       style={{
-        width: 190,
-        height: 190,
+        width: "100%",
+        aspectRatio: "1 / 1",
         transform: `scale(${pop * exit}) rotate(${rotate}deg)`,
-        filter: "drop-shadow(0 6px 10px rgba(0,0,0,0.35))",
+        filter: "drop-shadow(0 8px 14px rgba(0,0,0,0.45))",
       }}
     >
       {children}

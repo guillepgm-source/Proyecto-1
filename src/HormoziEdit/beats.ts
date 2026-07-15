@@ -44,7 +44,22 @@ export type FlashCutawayBeat = {
   icon?: "x" | "check";
 };
 
-export type CutawayBeat = ZoneCutawayBeat | KcalCutawayBeat | FlashCutawayBeat;
+// A full-screen cut to a big hand-drawn-style arrow + short label, the core
+// "camera cut to a drawing" beat from the reference edit.
+export type ArrowCutawayBeat = {
+  kind: "arrowCutaway";
+  startMs: number;
+  endMs: number;
+  label: string;
+  color: "red" | "green";
+  rotate?: number;
+};
+
+export type CutawayBeat =
+  | ZoneCutawayBeat
+  | KcalCutawayBeat
+  | FlashCutawayBeat
+  | ArrowCutawayBeat;
 
 // Kept short and snappy (1.3-2.5s each) - real quick camera cuts, not long
 // takeovers, spread across more moments instead of two long ones.
@@ -80,7 +95,36 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
     color: "red",
     icon: "x",
   },
+  {
+    kind: "arrowCutaway",
+    startMs: 12769,
+    endMs: 13692,
+    label: "CARDIO",
+    color: "green",
+  },
+  {
+    kind: "arrowCutaway",
+    startMs: 42868,
+    endMs: 45636,
+    label: "INTELIGENTE",
+    color: "green",
+  },
   { kind: "kcalCutaway", startMs: 46150, endMs: 48600 },
+  {
+    kind: "arrowCutaway",
+    startMs: 48600,
+    endMs: 50513,
+    label: "GRASA REAL",
+    color: "green",
+    rotate: 180,
+  },
+  {
+    kind: "arrowCutaway",
+    startMs: 62625,
+    endMs: 64022,
+    label: "FRUSTRACIÓN",
+    color: "red",
+  },
   {
     kind: "flashCutaway",
     startMs: 66400,
@@ -89,19 +133,6 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
     color: "green",
     icon: "check",
   },
-];
-
-// A deliberate freeze-frame + slow punch-in zoom, used sparingly at strong
-// reaction moments (not constantly) - fills the quieter stretch of the
-// video with real accents instead of a repeating shake.
-export type FreezeZoomBeat = {
-  atMs: number;
-  holdMs: number;
-};
-
-export const FREEZE_ZOOM_BEATS: FreezeZoomBeat[] = [
-  { atMs: 52350, holdMs: 1500 },
-  { atMs: 62700, holdMs: 1450 },
 ];
 
 export type SfxBeat = {
@@ -138,14 +169,13 @@ export type DoodleBeat =
   | { kind: "wave" | "runner"; startMs: number; endMs: number; side: "left" | "right" }
   | { kind: "counter"; startMs: number; endMs: number; side: "left" | "right"; label: string };
 
-// Kept intentionally light-touch (small corner accents, not full takeovers)
-// to fill the otherwise-bare opening stretch without competing with the
-// bigger cutaway beats.
+// Big, clearly-visible overlay doodles (not tucked in a tiny corner) drawn
+// on top of the still-playing video - the "cardio" and "elíptica" beats
+// were promoted to full arrowCutaway scenes instead, so only the intro
+// count-off stays as an overlay doodle.
 export const DOODLE_BEATS: DoodleBeat[] = [
   { kind: "wave", startMs: 0, endMs: 950, side: "right" },
   { kind: "counter", startMs: 1795, endMs: 2655, side: "left", label: "1" },
   { kind: "counter", startMs: 3153, endMs: 3929, side: "right", label: "2" },
   { kind: "counter", startMs: 5154, endMs: 5900, side: "left", label: "3" },
-  { kind: "runner", startMs: 12769, endMs: 13692, side: "right" },
-  { kind: "runner", startMs: 19850, endMs: 20500, side: "left" },
 ];

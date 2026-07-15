@@ -5,9 +5,9 @@ import { Doodle } from "./Doodle";
 
 const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
 
-// Doodles anchor to the bottom corners (graphics live up top, captions sit
-// in the middle band), so the three overlay layers never fight for the same
-// space and everything stays safely inside the 1920x1080 canvas.
+// Doodles are big and clearly visible in the upper band, on top of the
+// still-playing video - NOT tucked into a tiny corner. Captions live lower
+// (starting ~52% down) so the two never overlap.
 export const DoodleLayer: React.FC = () => {
   const { fps } = useVideoConfig();
 
@@ -28,12 +28,12 @@ export const DoodleLayer: React.FC = () => {
           >
             <AbsoluteFill
               style={{
-                justifyContent: "flex-end",
+                justifyContent: "flex-start",
                 alignItems: beat.side === "left" ? "flex-start" : "flex-end",
-                padding: "4% 3%",
+                padding: "10% 4%",
               }}
             >
-              <div style={{ width: 150 }}>
+              <div style={{ width: 320 }}>
                 <DoodleFrameReader beat={beat} durationFrames={durationFrames} />
               </div>
             </AbsoluteFill>

@@ -1,6 +1,6 @@
 import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
 import { CUTAWAY_BEATS } from "./beats";
-import { FlashCutaway, KcalCutaway, ZoneCutaway } from "./Cutaway";
+import { ArrowCutaway, FlashCutaway, KcalCutaway, ZoneCutaway } from "./Cutaway";
 
 const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
 
@@ -33,6 +33,13 @@ export const CutawayLayer: React.FC = () => {
                 <ZoneCutaway durationFrames={durationFrames} />
               ) : beat.kind === "kcalCutaway" ? (
                 <KcalCutaway durationFrames={durationFrames} />
+              ) : beat.kind === "arrowCutaway" ? (
+                <ArrowCutaway
+                  durationFrames={durationFrames}
+                  label={beat.label}
+                  color={FLASH_COLORS[beat.color]}
+                  rotate={beat.rotate}
+                />
               ) : (
                 <FlashCutaway
                   durationFrames={durationFrames}
