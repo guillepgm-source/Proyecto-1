@@ -1,12 +1,14 @@
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import type { TikTokPage } from "@remotion/captions";
 import { loadFont } from "@remotion/google-fonts/Anton";
+import { getHighlightColor } from "./highlightWords";
 
 const { fontFamily } = loadFont();
 
-// Plain bold white captions with a soft glow, matching the reference's
-// running-caption style exactly - no per-word color highlight, just a
-// punchy scale-pop on the word currently being spoken.
+// Bold left-anchored captions matching devinjatho's format exactly: plain
+// words stay in natural sentence case, a handful of key words are
+// capitalized and colored (red/green) for emphasis, and the whole block
+// sits lower-left instead of centered.
 const WORD_POP_DURATION = 6;
 
 export const CaptionPage: React.FC<{
@@ -68,25 +70,25 @@ export const CaptionPage: React.FC<{
     <div
       style={{
         position: "absolute",
-        left: "9%",
-        right: "9%",
-        top: "60%",
-        textAlign: "center",
+        left: "8%",
+        right: "12%",
+        top: "68%",
+        textAlign: "left",
       }}
     >
       <div
         style={{
           fontFamily,
           fontSize,
-          lineHeight: 1.15,
-          textAlign: "center",
-          textTransform: "uppercase",
+          lineHeight: 1.12,
+          textAlign: "left",
           whiteSpace: "pre-wrap",
           overflowWrap: "break-word",
           transform: `scale(${enter * exit}) translateY(${enterY + exitY}px)`,
+          transformOrigin: "left center",
           opacity: exit,
           color: "white",
-          WebkitTextStroke: `${Math.max(1.5, fontSize * 0.025)}px rgba(0,0,0,0.75)`,
+          WebkitTextStroke: "1px rgba(0,0,0,0.55)",
           paintOrder: "stroke fill",
           textShadow: "0 6px 22px rgba(0,0,0,0.7)",
         }}
@@ -95,6 +97,7 @@ export const CaptionPage: React.FC<{
           const isActive =
             token.fromMs <= absoluteTimeMs && token.toMs > absoluteTimeMs;
           const wasSpoken = token.toMs <= absoluteTimeMs;
+          const highlightColor = getHighlightColor(token.text);
 
           const tokenStartFrame =
             Math.round(((token.fromMs - page.startMs) / 1000) * fps) +
@@ -125,10 +128,13 @@ export const CaptionPage: React.FC<{
                   display: "inline-block",
                   marginLeft: "0.28em",
                   transform: `scale(${pop})`,
-                  color: "white",
-                  textShadow: isActive
-                    ? "0 0 20px rgba(255,255,255,0.9), 0 6px 22px rgba(0,0,0,0.7)"
-                    : undefined,
+                  textTransform: highlightColor ? "uppercase" : "none",
+                  color: highlightColor ?? "white",
+                  textShadow: highlightColor
+                    ? `0 0 22px ${highlightColor}, 0 6px 18px rgba(0,0,0,0.75)`
+                    : isActive
+                      ? "0 0 20px rgba(255,255,255,0.9), 0 6px 22px rgba(0,0,0,0.7)"
+                      : undefined,
                   opacity: wasSpoken || isActive ? 1 : 0.78,
                 }}
               >

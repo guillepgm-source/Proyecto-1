@@ -1,7 +1,7 @@
 import { Easing, interpolate, useCurrentFrame } from "remotion";
-import { loadFont } from "@remotion/google-fonts/PressStart2P";
+import { loadFont } from "@remotion/google-fonts/Anton";
 
-const { fontFamily: pixelFont } = loadFont();
+const { fontFamily: boldFont } = loadFont();
 
 const ACCENT = "#39FF88";
 const RED = "#FF4D4D";
@@ -86,7 +86,7 @@ const SectionHeader: React.FC<{ children: React.ReactNode; enter: number }> = ({
     />
     <div
       style={{
-        fontFamily: pixelFont,
+        fontFamily: boldFont,
         fontSize: 30,
         color: ACCENT,
         textShadow: `0 0 14px ${ACCENT}, 0 0 30px ${ACCENT}`,
@@ -166,7 +166,7 @@ export const ZoneCutaway: React.FC<{ durationFrames: number }> = ({ durationFram
               />
               <div
                 style={{
-                  fontFamily: pixelFont,
+                  fontFamily: boldFont,
                   fontSize: 15,
                   color: isZone2 ? ACCENT : "rgba(255,255,255,0.55)",
                 }}
@@ -219,7 +219,7 @@ const Bar: React.FC<{
         <span style={{ fontFamily: "system-ui, sans-serif", fontWeight: 700, fontSize: 26, color: "white" }}>
           {label}
         </span>
-        <span style={{ fontFamily: pixelFont, fontSize: 20, color }}>{value}</span>
+        <span style={{ fontFamily: boldFont, fontSize: 20, color }}>{value}</span>
       </div>
       <div
         style={{
@@ -296,7 +296,7 @@ export const FlashCutaway: React.FC<{
       </div>
       <div
         style={{
-          fontFamily: pixelFont,
+          fontFamily: boldFont,
           fontSize: 30,
           color,
           textShadow: `0 0 16px ${color}, 0 0 32px ${color}`,
