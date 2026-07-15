@@ -112,14 +112,6 @@ export const CUTAWAY_BEATS: CutawayBeat[] = [
     after: "heart",
     color: "green",
   },
-  {
-    kind: "transformCutaway",
-    startMs: 42868,
-    endMs: 45636,
-    label: "INTELIGENTE",
-    after: "check",
-    color: "green",
-  },
   { kind: "kcalCutaway", startMs: 46150, endMs: 48600 },
   {
     kind: "transformCutaway",
@@ -168,7 +160,6 @@ export const SFX_BEATS: SfxBeat[] = [
   { src: "pop", atMs: 38100, volume: 0.75 },
   { src: "whoosh", atMs: 39550, volume: 0.8 },
   { src: "tick", atMs: 29800, volume: 0.85 },
-  { src: "buildup", atMs: 43168, volume: 0.8 },
   { src: "whoosh", atMs: 46150, volume: 0.9 },
   { src: "pop", atMs: 46900, volume: 0.75 },
   { src: "pop", atMs: 47800, volume: 0.75 },

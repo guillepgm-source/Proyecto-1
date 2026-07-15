@@ -5,7 +5,7 @@ const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
 
 // Global trim on top of each beat's own volume - they were landing too loud
 // overall, so pull everything down together instead of re-tuning every beat.
-const VOLUME_SCALE = 0.65;
+const VOLUME_SCALE = 0.4;
 
 // One-shot sound effects (synthesized locally, no stock library available)
 // layered sparingly under the punchiest moments - title card, graphic
