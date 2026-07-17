@@ -45,7 +45,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="HormoziEdit3"
         component={HormoziEdit}
-        durationInFrames={1090}
+        durationInFrames={1362}
         fps={30}
         width={1080}
         height={1920}

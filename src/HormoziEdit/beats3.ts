@@ -9,37 +9,40 @@ import type { EmphasisZoomBeat } from "./zoomPunch";
 
 export const TITLE_CARD_BEATS_V3: [] = [];
 
+// No jump cuts on this video - the user already edited/trimmed it himself,
+// so all timestamps below are raw source seconds (comp time == source time).
+
 // Only the icon-based transform cutaway - body/arrow/result is an actual
 // drawing, not a word on a black screen.
 export const CUTAWAY_BEATS_V3: CutawayBeat[] = [
   {
     kind: "transformCutaway",
-    startMs: 14367,
-    endMs: 17433,
+    startMs: 18000,
+    endMs: 21500,
     label: "GENÉTICA EXTREMA",
     after: "body",
     color: "red",
   },
   {
     kind: "transformCutaway",
-    startMs: 17433,
-    endMs: 19467,
+    startMs: 22000,
+    endMs: 25000,
     label: "FRUSTRACIÓN",
     after: "x",
     color: "red",
   },
   {
     kind: "transformCutaway",
-    startMs: 22767,
-    endMs: 25367,
+    startMs: 30000,
+    endMs: 33000,
     label: "MINI CUTS",
     after: "check",
     color: "green",
   },
   {
     kind: "transformCutaway",
-    startMs: 32667,
-    endMs: 34667,
+    startMs: 41000,
+    endMs: 44000,
     label: "NO SIRVE DE NADA",
     after: "x",
     color: "red",
@@ -47,24 +50,26 @@ export const CUTAWAY_BEATS_V3: CutawayBeat[] = [
 ];
 
 export const SFX_BEATS_V3: SfxBeat[] = [
-  { src: "pop", atMs: 0, volume: 0.6 },
-  { src: "tick", atMs: 9200, volume: 0.7 },
-  { src: "buildup", atMs: 14667, volume: 0.75 },
-  { src: "buildup", atMs: 17733, volume: 0.75 },
-  { src: "ding", atMs: 23067, volume: 0.85 },
-  { src: "whoosh", atMs: 32967, volume: 0.8 },
+  { src: "pop", atMs: 3000, volume: 0.6 },
+  { src: "tick", atMs: 13000, volume: 0.7 },
+  { src: "buildup", atMs: 18300, volume: 0.75 },
+  { src: "buildup", atMs: 22300, volume: 0.75 },
+  { src: "ding", atMs: 30300, volume: 0.85 },
+  { src: "whoosh", atMs: 41300, volume: 0.8 },
 ];
 
+// No opening doodle - the "wave" flourish at frame 0 read as a random
+// unrelated animation, so the only overlay doodle left is the "3" count on
+// "entrenando 1, 2, 3 años".
 export const DOODLE_BEATS_V3: DoodleBeat[] = [
-  { kind: "wave", startMs: 0, endMs: 900, side: "right" },
-  { kind: "counter", startMs: 9200, endMs: 10700, side: "left", label: "3" },
+  { kind: "counter", startMs: 13000, endMs: 14500, side: "left", label: "3" },
 ];
 
 // Sustained push-in (video keeps playing, no freeze) at the two strongest
 // emotional beats: the opening hook and the closing "no sirve de nada".
 export const EMPHASIS_ZOOM_BEATS_V3: EmphasisZoomBeat[] = [
-  { startMs: 3500, endMs: 7500, strength: 0.1 },
-  { startMs: 32667, endMs: 35667, strength: 0.12 },
+  { startMs: 4000, endMs: 9000, strength: 0.1 },
+  { startMs: 44000, endMs: 45393, strength: 0.12 },
 ];
 
 export const BEATS_V3: BeatsData = {
