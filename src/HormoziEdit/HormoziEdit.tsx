@@ -14,6 +14,7 @@ import { CutawayLayer, isCutawayActive } from "./CutawayLayer";
 import { TitleCardLayer } from "./TitleCardLayer";
 import { SfxLayer } from "./SfxLayer";
 import {
+  getEmphasisZoomScale,
   getFlashOpacity,
   getKenBurnsScale,
   getPunchRotation,
@@ -45,6 +46,9 @@ export type HormoziEditProps = {
   // first video's warm kitchen lighting - a bright white-walled room reads
   // muddy at full strength, so this can be dialed down per video.
   colorGradeStrength?: number;
+  // 0-1: multiplier on the white flash-on-cut effect. Firing at full
+  // strength on every single jump cut got called out as too heavy/frequent.
+  flashStrength?: number;
   // Populated by calculateMetadata before the component ever renders.
   cutlist?: CutSegment[];
   pages?: TikTokPage[];
@@ -97,6 +101,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   beats = BEATS_V1,
   audioGain = 1,
   colorGradeStrength = 1,
+  flashStrength = 1,
 }) => {
   const frame = useCurrentFrame();
   const { width, fps } = useVideoConfig();
@@ -104,8 +109,9 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   const cutBoundaries = cutlist.map((segment) => segment.startFrame);
   const punchScale = getZoomPunchScale(frame, cutBoundaries);
   const punchRotation = getPunchRotation(frame, cutBoundaries);
-  const flashOpacity = getFlashOpacity(frame, cutBoundaries);
+  const flashOpacity = getFlashOpacity(frame, cutBoundaries, flashStrength);
   const kenBurns = getKenBurnsScale(frame);
+  const emphasisZoom = getEmphasisZoomScale(frame, fps, beats.emphasisZoom ?? []);
 
   const g = colorGradeStrength;
   const contrast = 1 + 0.1 * g;
@@ -131,7 +137,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       <AbsoluteFill
         style={{
-          transform: `scale(${punchScale * kenBurns}) rotate(${punchRotation}deg)`,
+          transform: `scale(${punchScale * kenBurns * emphasisZoom}) rotate(${punchRotation}deg)`,
           filter: `contrast(${contrast}) saturate(${saturate}) brightness(${brightness})`,
         }}
       >

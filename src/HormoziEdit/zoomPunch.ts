@@ -34,17 +34,51 @@ export const getZoomPunchScale = (
 };
 
 // A brief white flash overlay opacity at each cut, for extra kinetic "snap".
-export const getFlashOpacity = (frame: number, boundaries: number[]): number => {
+// `strength` is a 0-1 multiplier on top of the base FLASH_STRENGTH so it can
+// be dialed down per video without touching every call site.
+export const getFlashOpacity = (
+  frame: number,
+  boundaries: number[],
+  strength = 1,
+): number => {
   const local = nearestBoundary(frame, boundaries);
   if (local >= FLASH_DURATION_FRAMES) {
     return 0;
   }
 
-  return interpolate(local, [0, 1, FLASH_DURATION_FRAMES], [0, FLASH_STRENGTH, 0], {
-    easing: Easing.out(Easing.cubic),
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  return interpolate(
+    local,
+    [0, 1, FLASH_DURATION_FRAMES],
+    [0, FLASH_STRENGTH * strength, 0],
+    {
+      easing: Easing.out(Easing.cubic),
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    },
+  );
+};
+
+// A deliberate, sustained push-in (no freeze - the video keeps playing)
+// used sparingly to emphasize a strong line, distinct from the constant
+// subtle Ken Burns drift.
+export type EmphasisZoomBeat = { startMs: number; endMs: number; strength?: number };
+
+export const getEmphasisZoomScale = (
+  frame: number,
+  fps: number,
+  beats: EmphasisZoomBeat[],
+): number => {
+  const nowMs = (frame / fps) * 1000;
+  for (const beat of beats) {
+    if (nowMs >= beat.startMs && nowMs < beat.endMs) {
+      const progress = (nowMs - beat.startMs) / (beat.endMs - beat.startMs);
+      const eased = interpolate(progress, [0, 1], [0, 1], {
+        easing: Easing.out(Easing.cubic),
+      });
+      return 1 + eased * (beat.strength ?? 0.14);
+    }
+  }
+  return 1;
 };
 
 const KEN_BURNS_CYCLE_FRAMES = 220;

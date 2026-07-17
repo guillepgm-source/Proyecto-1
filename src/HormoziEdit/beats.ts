@@ -199,6 +199,7 @@ export type BeatsData = {
   cutaway: CutawayBeat[];
   sfx: SfxBeat[];
   doodle: DoodleBeat[];
+  emphasisZoom?: import("./zoomPunch").EmphasisZoomBeat[];
 };
 
 export const BEATS_V1: BeatsData = {

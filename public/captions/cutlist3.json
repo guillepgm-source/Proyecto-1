@@ -1,0 +1,152 @@
+[
+  {
+    "trimBefore": 0,
+    "trimAfter": 105,
+    "startFrame": 0,
+    "durationFrames": 105
+  },
+  {
+    "trimBefore": 126,
+    "trimAfter": 233,
+    "startFrame": 105,
+    "durationFrames": 107
+  },
+  {
+    "trimBefore": 241,
+    "trimAfter": 254,
+    "startFrame": 212,
+    "durationFrames": 13
+  },
+  {
+    "trimBefore": 276,
+    "trimAfter": 292,
+    "startFrame": 225,
+    "durationFrames": 16
+  },
+  {
+    "trimBefore": 301,
+    "trimAfter": 324,
+    "startFrame": 241,
+    "durationFrames": 23
+  },
+  {
+    "trimBefore": 331,
+    "trimAfter": 425,
+    "startFrame": 264,
+    "durationFrames": 94
+  },
+  {
+    "trimBefore": 432,
+    "trimAfter": 449,
+    "startFrame": 358,
+    "durationFrames": 17
+  },
+  {
+    "trimBefore": 456,
+    "trimAfter": 477,
+    "startFrame": 375,
+    "durationFrames": 21
+  },
+  {
+    "trimBefore": 486,
+    "trimAfter": 491,
+    "startFrame": 396,
+    "durationFrames": 5
+  },
+  {
+    "trimBefore": 504,
+    "trimAfter": 528,
+    "startFrame": 401,
+    "durationFrames": 24
+  },
+  {
+    "trimBefore": 540,
+    "trimAfter": 576,
+    "startFrame": 425,
+    "durationFrames": 36
+  },
+  {
+    "trimBefore": 591,
+    "trimAfter": 653,
+    "startFrame": 461,
+    "durationFrames": 62
+  },
+  {
+    "trimBefore": 663,
+    "trimAfter": 686,
+    "startFrame": 523,
+    "durationFrames": 23
+  },
+  {
+    "trimBefore": 698,
+    "trimAfter": 718,
+    "startFrame": 546,
+    "durationFrames": 20
+  },
+  {
+    "trimBefore": 726,
+    "trimAfter": 744,
+    "startFrame": 566,
+    "durationFrames": 18
+  },
+  {
+    "trimBefore": 759,
+    "trimAfter": 771,
+    "startFrame": 584,
+    "durationFrames": 12
+  },
+  {
+    "trimBefore": 783,
+    "trimAfter": 930,
+    "startFrame": 596,
+    "durationFrames": 147
+  },
+  {
+    "trimBefore": 939,
+    "trimAfter": 957,
+    "startFrame": 743,
+    "durationFrames": 18
+  },
+  {
+    "trimBefore": 963,
+    "trimAfter": 972,
+    "startFrame": 761,
+    "durationFrames": 9
+  },
+  {
+    "trimBefore": 982,
+    "trimAfter": 1116,
+    "startFrame": 770,
+    "durationFrames": 134
+  },
+  {
+    "trimBefore": 1127,
+    "trimAfter": 1152,
+    "startFrame": 904,
+    "durationFrames": 25
+  },
+  {
+    "trimBefore": 1165,
+    "trimAfter": 1193,
+    "startFrame": 929,
+    "durationFrames": 28
+  },
+  {
+    "trimBefore": 1207,
+    "trimAfter": 1321,
+    "startFrame": 957,
+    "durationFrames": 114
+  },
+  {
+    "trimBefore": 1336,
+    "trimAfter": 1353,
+    "startFrame": 1071,
+    "durationFrames": 17
+  },
+  {
+    "trimBefore": 1360,
+    "trimAfter": 1362,
+    "startFrame": 1088,
+    "durationFrames": 2
+  }
+]
