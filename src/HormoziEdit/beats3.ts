@@ -30,6 +30,7 @@ export const CUTAWAY_BEATS_V3: CutawayBeat[] = [
     label: "FRUSTRACIÓN",
     after: "x",
     color: "red",
+    direction: "column",
   },
   {
     kind: "transformCutaway",
@@ -38,14 +39,22 @@ export const CUTAWAY_BEATS_V3: CutawayBeat[] = [
     label: "MINI CUTS",
     after: "check",
     color: "green",
+    reverse: true,
   },
+  // "Carbohidratos" / "bajar la comida" / "hacer muchísimo cardio" each get
+  // their own icon + declining line, all converging on the shared rejection
+  // mark right as "no sirve de nada" lands.
   {
-    kind: "transformCutaway",
-    startMs: 41000,
-    endMs: 44000,
+    kind: "convergeCutaway",
+    startMs: 38500,
+    endMs: 44500,
     label: "NO SIRVE DE NADA",
-    after: "x",
     color: "red",
+    items: [
+      { icon: "bread", atMs: 39000 },
+      { icon: "food", atMs: 40000 },
+      { icon: "runner", atMs: 41500 },
+    ],
   },
 ];
 
@@ -53,17 +62,19 @@ export const SFX_BEATS_V3: SfxBeat[] = [
   { src: "pop", atMs: 3000, volume: 0.6 },
   { src: "tick", atMs: 13000, volume: 0.7 },
   { src: "buildup", atMs: 18300, volume: 0.75 },
-  { src: "buildup", atMs: 22300, volume: 0.75 },
+  { src: "whoosh", atMs: 22300, volume: 0.75 },
   { src: "ding", atMs: 30300, volume: 0.85 },
-  { src: "whoosh", atMs: 41300, volume: 0.8 },
+  { src: "pop", atMs: 39000, volume: 0.7 },
+  { src: "pop", atMs: 40000, volume: 0.7 },
+  { src: "pop", atMs: 41500, volume: 0.7 },
+  { src: "buildup", atMs: 42600, volume: 0.75 },
+  { src: "ding", atMs: 43200, volume: 0.85 },
 ];
 
-// No opening doodle - the "wave" flourish at frame 0 read as a random
-// unrelated animation, so the only overlay doodle left is the "3" count on
-// "entrenando 1, 2, 3 años".
-export const DOODLE_BEATS_V3: DoodleBeat[] = [
-  { kind: "counter", startMs: 13000, endMs: 14500, side: "left", label: "3" },
-];
+// No overlay doodles at all - the "wave" opening flourish read as a random
+// unrelated animation, and the "3" counter on "entrenando 1, 2, 3 años" was
+// called out as making no sense either. Only the cutaway scenes remain.
+export const DOODLE_BEATS_V3: DoodleBeat[] = [];
 
 // Sustained push-in (video keeps playing, no freeze) at the two strongest
 // emotional beats: the opening hook and the closing "no sirve de nada".

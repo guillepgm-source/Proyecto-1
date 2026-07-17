@@ -363,7 +363,17 @@ export const TransformCutaway: React.FC<{
   label: string;
   after?: keyof typeof TRANSFORM_AFTER_ICONS;
   color?: string;
-}> = ({ durationFrames, label, after = "body", color = ACCENT }) => {
+  // Visual variants so consecutive transform beats don't all look identical.
+  direction?: "row" | "column";
+  reverse?: boolean;
+}> = ({
+  durationFrames,
+  label,
+  after = "body",
+  color = ACCENT,
+  direction = "row",
+  reverse = false,
+}) => {
   const { frame, enter, exit } = useSceneMotion(durationFrames);
   const beforeIn = interpolate(frame, [0, 8], [0, 1], {
     easing: Easing.out(Easing.cubic),
@@ -384,6 +394,16 @@ export const TransformCutaway: React.FC<{
     extrapolateRight: "clamp",
   });
 
+  const arrowRotate = direction === "column" ? 90 : 0;
+  const flexDirection: React.CSSProperties["flexDirection"] =
+    direction === "column"
+      ? reverse
+        ? "column-reverse"
+        : "column"
+      : reverse
+        ? "row-reverse"
+        : "row";
+
   return (
     <div
       style={{
@@ -397,12 +417,12 @@ export const TransformCutaway: React.FC<{
         opacity: enter * exit,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+      <div style={{ display: "flex", flexDirection, alignItems: "center", gap: 20 }}>
         <div style={{ opacity: beforeIn, transform: `scale(${beforeIn})` }}>
           <BodyBefore />
         </div>
         <div style={{ transform: "scale(2.3)" }}>
-          <Arrow progress={arrowProgress} color={color} />
+          <Arrow progress={arrowProgress} color={color} rotate={arrowRotate} />
         </div>
         <div
           style={{
@@ -422,6 +442,147 @@ export const TransformCutaway: React.FC<{
           textShadow: `0 0 18px ${color}, 0 0 36px ${color}`,
           textAlign: "center",
           lineHeight: 1.4,
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
+};
+
+// Original line-art icons (no emojis) for the "wrong approach" checklist
+// beat - bread, a bowl of food, a running figure.
+const BreadIcon: React.FC<{ color: string }> = ({ color }) => (
+  <svg width={72} height={54} viewBox="0 0 100 70" fill="none">
+    <path
+      d="M10 62 Q8 22 50 15 Q92 22 90 62 Z"
+      stroke={color}
+      strokeWidth="6"
+      strokeLinejoin="round"
+    />
+    <path d="M32 30 L22 52" stroke={color} strokeWidth="5" strokeLinecap="round" />
+    <path d="M52 25 L44 55" stroke={color} strokeWidth="5" strokeLinecap="round" />
+    <path d="M70 30 L64 52" stroke={color} strokeWidth="5" strokeLinecap="round" />
+  </svg>
+);
+
+const FoodBowlIcon: React.FC<{ color: string }> = ({ color }) => (
+  <svg width={72} height={54} viewBox="0 0 100 70" fill="none">
+    <path
+      d="M12 38 Q12 64 50 64 Q88 64 88 38"
+      stroke={color}
+      strokeWidth="6"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <line x1="8" y1="38" x2="92" y2="38" stroke={color} strokeWidth="6" strokeLinecap="round" />
+    <path d="M36 22 Q30 12 36 2" stroke={color} strokeWidth="3" fill="none" strokeLinecap="round" opacity={0.8} />
+    <path d="M56 22 Q50 12 56 2" stroke={color} strokeWidth="3" fill="none" strokeLinecap="round" opacity={0.8} />
+  </svg>
+);
+
+const RunnerIcon: React.FC<{ color: string }> = ({ color }) => (
+  <svg width={60} height={72} viewBox="0 0 90 100" fill="none">
+    <circle cx="60" cy="18" r="10" fill={color} />
+    <path d="M56 30 L42 52 L52 68" stroke={color} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M46 42 L68 37" stroke={color} strokeWidth="6" strokeLinecap="round" />
+    <path d="M42 52 L22 60" stroke={color} strokeWidth="6" strokeLinecap="round" />
+    <path d="M52 68 L66 90" stroke={color} strokeWidth="6" strokeLinecap="round" />
+    <path d="M52 68 L36 92" stroke={color} strokeWidth="6" strokeLinecap="round" />
+  </svg>
+);
+
+const CONVERGE_ICONS = {
+  bread: BreadIcon,
+  food: FoodBowlIcon,
+  runner: RunnerIcon,
+};
+
+// A checklist of "wrong approach" items that reveal one at a time (synced to
+// the word that names each one), each with its own declining line, all
+// converging on a shared rejection mark - for a line that lists several
+// bad habits before landing on one conclusion.
+export const ConvergeCutaway: React.FC<{
+  durationFrames: number;
+  items: { icon: keyof typeof CONVERGE_ICONS; triggerFrame: number }[];
+  label: string;
+  color: string;
+}> = ({ durationFrames, items, label, color }) => {
+  const { frame, enter, exit } = useSceneMotion(durationFrames);
+  const finalFrame = Math.max(...items.map((item) => item.triggerFrame)) + 14;
+  const markIn = interpolate(frame, [finalFrame, finalFrame + 8], [0, 1], {
+    easing: Easing.out(Easing.back(2.5)),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 24,
+        opacity: enter * exit,
+      }}
+    >
+      <div style={{ display: "flex", gap: 46, alignItems: "flex-start" }}>
+        {items.map((item, index) => {
+          const localFrame = frame - item.triggerFrame;
+          const iconIn = interpolate(localFrame, [0, 8], [0, 1], {
+            easing: Easing.out(Easing.back(2)),
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          });
+          const lineProgress = interpolate(localFrame, [6, 20], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          });
+          const Icon = CONVERGE_ICONS[item.icon];
+          return (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                opacity: localFrame < 0 ? 0 : 1,
+              }}
+            >
+              <div style={{ transform: `scale(${iconIn})` }}>
+                <Icon color={color} />
+              </div>
+              <svg width={8} height={54} style={{ overflow: "visible" }}>
+                <line
+                  x1={4}
+                  y1={0}
+                  x2={4}
+                  y2={54 * lineProgress}
+                  stroke={color}
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ transform: `scale(${markIn})`, opacity: markIn }}>
+        <XIcon size={56} color={color} />
+      </div>
+      <div
+        style={{
+          fontFamily: boldFont,
+          fontSize: 38,
+          color,
+          textShadow: `0 0 18px ${color}, 0 0 36px ${color}`,
+          textAlign: "center",
+          lineHeight: 1.4,
+          opacity: markIn,
+          transform: `scale(${markIn})`,
         }}
       >
         {label}

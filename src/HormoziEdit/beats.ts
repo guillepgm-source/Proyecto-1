@@ -54,13 +54,29 @@ export type TransformCutawayBeat = {
   label: string;
   after?: "body" | "check" | "x" | "heart";
   color?: "red" | "green";
+  // Visual variants so consecutive transform beats don't all look identical.
+  direction?: "row" | "column";
+  reverse?: boolean;
+};
+
+// A checklist of "wrong approach" items (icons) that reveal one at a time,
+// synced to the word naming each one, all converging on a shared rejection
+// mark - for a line that lists several bad habits before one conclusion.
+export type ConvergeCutawayBeat = {
+  kind: "convergeCutaway";
+  startMs: number;
+  endMs: number;
+  label: string;
+  color: "red" | "green";
+  items: { icon: "bread" | "food" | "runner"; atMs: number }[];
 };
 
 export type CutawayBeat =
   | ZoneCutawayBeat
   | KcalCutawayBeat
   | FlashCutawayBeat
-  | TransformCutawayBeat;
+  | TransformCutawayBeat
+  | ConvergeCutawayBeat;
 
 // Kept short and snappy (1.3-2.5s each) - real quick camera cuts, not long
 // takeovers, spread across more moments instead of two long ones.
