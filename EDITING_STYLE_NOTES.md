@@ -71,6 +71,25 @@ editar un nuevo vídeo para no repetir explicaciones ni errores ya corregidos.
   para que Remotion no intente descargar su propio Chromium (bloqueado por
   el proxy de red).
 
+## Checklist de optimización de hook (con dato real detrás)
+Referencia `ivanprietox` ("Subí dos veces el mismo vídeo..."): subió el
+mismo vídeo dos veces cambiando solo el gancho y comparó retención -
+**53% → 61%**. Los cambios concretos que hizo, en este orden:
+1. **Color rojo** en las palabras clave del texto en pantalla (ya lo hacemos).
+2. **Las palabras** - reescribir el copy del hook en sí, no solo el estilo.
+3. **La fuente** - cambiar la tipografía del texto en pantalla.
+4. **Mover** - reposicionar dónde cae el texto en el encuadre.
+5. **Iluminación** - aclarar/realzar la cara (función "Enhance" de CapCut).
+6. **Añadir música** - un track de música de fondo continuo, en pista
+   separada de la voz y separada de los SFX puntuales (su timeline tenía
+   `Final voiceover clean.mp3` + `solo musica v2.mp3` + SFX sueltos tipo
+   `swish`/`typing`). **Esto es nuevo para nosotros**: `SfxLayer.tsx` solo
+   tiene efectos puntuales, no hay música de fondo continua bajo la voz -
+   valorar añadir un lecho musical de bajo volumen en el próximo vídeo.
+
+Cuando el usuario pida "mejora el gancho/hook", repasar esta lista de 6
+puntos como checklist antes de improvisar algo nuevo.
+
 ## Referencias enviadas por el usuario
 - **devinjatho** (Instagram) - referencia principal de formato general:
   subtítulos centrados, cutaways a pantalla negra con dibujos/flechas,
@@ -79,6 +98,9 @@ editar un nuevo vídeo para no repetir explicaciones ni errores ya corregidos.
   estilo de caption de dos tonos y de la idea de "capas de edición"
   (color correction, reframe+zoom, captions, animations, audio) como
   checklist mental de qué aplicar a un hook para que quede completo.
+- **ivanprietox** (TikTok/IG, vídeo "Subí dos veces el mismo vídeo...") -
+  referencia táctica de qué cambios de hook mueven la retención de verdad
+  (ver checklist arriba), con dato de antes/después real.
 
 ## Contexto del canal
 - Nicho: fitness/gimnasio. El usuario trabaja en un gimnasio y su ángulo
