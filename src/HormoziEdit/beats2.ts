@@ -19,22 +19,10 @@ export const TITLE_CARD_BEATS_V2: TitleCardBeat[] = [
   },
 ];
 
+// Kept sparse on purpose - this video is only ~40s, so packing in as many
+// cutaways as the 68s first video made it feel rushed/cramped instead of
+// dynamic. Only the strongest, clearest beats stay.
 export const CUTAWAY_BEATS_V2: CutawayBeat[] = [
-  {
-    kind: "flashCutaway",
-    startMs: 7902,
-    endMs: 8540,
-    text: "PEOR",
-    color: "red",
-    icon: "x",
-  },
-  {
-    kind: "flashCutaway",
-    startMs: 12274,
-    endMs: 13600,
-    text: "AÑOS DE ENTRENO",
-    color: "green",
-  },
   {
     kind: "transformCutaway",
     startMs: 17940,
@@ -61,21 +49,6 @@ export const CUTAWAY_BEATS_V2: CutawayBeat[] = [
   },
   {
     kind: "flashCutaway",
-    startMs: 28872,
-    endMs: 30347,
-    text: "AGUA Y SODIO",
-    color: "green",
-  },
-  {
-    kind: "flashCutaway",
-    startMs: 34334,
-    endMs: 36400,
-    text: "MAL HECHO",
-    color: "red",
-    icon: "x",
-  },
-  {
-    kind: "flashCutaway",
     startMs: 37669,
     endMs: 39679,
     text: "NO SIRVE DE NADA",
@@ -86,14 +59,10 @@ export const CUTAWAY_BEATS_V2: CutawayBeat[] = [
 
 export const SFX_BEATS_V2: SfxBeat[] = [
   { src: "pop", atMs: 0, volume: 0.65 },
-  { src: "whoosh", atMs: 7902, volume: 0.85 },
   { src: "whoosh", atMs: 8754, volume: 0.9 },
-  { src: "tick", atMs: 12274, volume: 0.8 },
   { src: "buildup", atMs: 18240, volume: 0.8 },
   { src: "buildup", atMs: 21185, volume: 0.8 },
   { src: "ding", atMs: 26859, volume: 0.9 },
-  { src: "whoosh", atMs: 28872, volume: 0.8 },
-  { src: "tick", atMs: 34334, volume: 0.85 },
   { src: "whoosh", atMs: 37669, volume: 0.9 },
 ];
 

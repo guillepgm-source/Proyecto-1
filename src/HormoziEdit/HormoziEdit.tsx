@@ -41,6 +41,10 @@ export type HormoziEditProps = {
   // Linear gain on the dialogue track - some raw phone recordings come in
   // much quieter than others.
   audioGain?: number;
+  // 0-1: how strong the moody color grade + vignette is. Was tuned for the
+  // first video's warm kitchen lighting - a bright white-walled room reads
+  // muddy at full strength, so this can be dialed down per video.
+  colorGradeStrength?: number;
   // Populated by calculateMetadata before the component ever renders.
   cutlist?: CutSegment[];
   pages?: TikTokPage[];
@@ -92,6 +96,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   pages = [],
   beats = BEATS_V1,
   audioGain = 1,
+  colorGradeStrength = 1,
 }) => {
   const frame = useCurrentFrame();
   const { width, fps } = useVideoConfig();
@@ -101,6 +106,15 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   const punchRotation = getPunchRotation(frame, cutBoundaries);
   const flashOpacity = getFlashOpacity(frame, cutBoundaries);
   const kenBurns = getKenBurnsScale(frame);
+
+  const g = colorGradeStrength;
+  const contrast = 1 + 0.1 * g;
+  const saturate = 1 - 0.18 * g;
+  const brightness = 1 - 0.1 * g;
+  const vignetteMid = 0.55 * g;
+  const vignetteEdge = 0.82 * g;
+  const bottomMid = 0.5 * g;
+  const bottomEdge = 0.62 * g;
 
   const captionWidth = Math.min(CAPTION_SAFE_WIDTH, width * 0.86);
 
@@ -118,7 +132,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
       <AbsoluteFill
         style={{
           transform: `scale(${punchScale * kenBurns}) rotate(${punchRotation}deg)`,
-          filter: "contrast(1.1) saturate(0.82) brightness(0.9)",
+          filter: `contrast(${contrast}) saturate(${saturate}) brightness(${brightness})`,
         }}
       >
         <JumpCutVideo
@@ -132,15 +146,13 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
       {/* Moody black vignette, closer to the reference's black-backdrop look. */}
       <AbsoluteFill
         style={{
-          background:
-            "radial-gradient(ellipse at 50% 42%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.55) 88%, rgba(0,0,0,0.82) 100%)",
+          background: `radial-gradient(ellipse at 50% 42%, rgba(0,0,0,0) 42%, rgba(0,0,0,${vignetteMid}) 88%, rgba(0,0,0,${vignetteEdge}) 100%)`,
         }}
       />
 
       <AbsoluteFill
         style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0) 42%, rgba(0,0,0,0.5) 76%, rgba(0,0,0,0.62) 100%)",
+          background: `linear-gradient(to bottom, rgba(0,0,0,0) 42%, rgba(0,0,0,${bottomMid}) 76%, rgba(0,0,0,${bottomEdge}) 100%)`,
         }}
       />
 
