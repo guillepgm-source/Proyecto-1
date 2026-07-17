@@ -1,0 +1,128 @@
+[
+  {
+    "trimBefore": 0,
+    "trimAfter": 111,
+    "startFrame": 0,
+    "durationFrames": 111
+  },
+  {
+    "trimBefore": 142,
+    "trimAfter": 286,
+    "startFrame": 111,
+    "durationFrames": 144
+  },
+  {
+    "trimBefore": 299,
+    "trimAfter": 411,
+    "startFrame": 255,
+    "durationFrames": 112
+  },
+  {
+    "trimBefore": 422,
+    "trimAfter": 464,
+    "startFrame": 367,
+    "durationFrames": 42
+  },
+  {
+    "trimBefore": 470,
+    "trimAfter": 488,
+    "startFrame": 409,
+    "durationFrames": 18
+  },
+  {
+    "trimBefore": 505,
+    "trimAfter": 542,
+    "startFrame": 427,
+    "durationFrames": 37
+  },
+  {
+    "trimBefore": 553,
+    "trimAfter": 626,
+    "startFrame": 464,
+    "durationFrames": 73
+  },
+  {
+    "trimBefore": 641,
+    "trimAfter": 703,
+    "startFrame": 537,
+    "durationFrames": 62
+  },
+  {
+    "trimBefore": 711,
+    "trimAfter": 737,
+    "startFrame": 599,
+    "durationFrames": 26
+  },
+  {
+    "trimBefore": 747,
+    "trimAfter": 768,
+    "startFrame": 625,
+    "durationFrames": 21
+  },
+  {
+    "trimBefore": 775,
+    "trimAfter": 800,
+    "startFrame": 646,
+    "durationFrames": 25
+  },
+  {
+    "trimBefore": 808,
+    "trimAfter": 821,
+    "startFrame": 671,
+    "durationFrames": 13
+  },
+  {
+    "trimBefore": 833,
+    "trimAfter": 980,
+    "startFrame": 684,
+    "durationFrames": 147
+  },
+  {
+    "trimBefore": 988,
+    "trimAfter": 1022,
+    "startFrame": 831,
+    "durationFrames": 34
+  },
+  {
+    "trimBefore": 1032,
+    "trimAfter": 1170,
+    "startFrame": 865,
+    "durationFrames": 138
+  },
+  {
+    "trimBefore": 1176,
+    "trimAfter": 1201,
+    "startFrame": 1003,
+    "durationFrames": 25
+  },
+  {
+    "trimBefore": 1214,
+    "trimAfter": 1243,
+    "startFrame": 1028,
+    "durationFrames": 29
+  },
+  {
+    "trimBefore": 1257,
+    "trimAfter": 1298,
+    "startFrame": 1057,
+    "durationFrames": 41
+  },
+  {
+    "trimBefore": 1311,
+    "trimAfter": 1402,
+    "startFrame": 1098,
+    "durationFrames": 91
+  },
+  {
+    "trimBefore": 1415,
+    "trimAfter": 1437,
+    "startFrame": 1189,
+    "durationFrames": 22
+  },
+  {
+    "trimBefore": 1463,
+    "trimAfter": 1464,
+    "startFrame": 1211,
+    "durationFrames": 1
+  }
+]

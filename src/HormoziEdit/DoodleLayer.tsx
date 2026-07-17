@@ -1,5 +1,4 @@
 import { AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig } from "remotion";
-import { DOODLE_BEATS } from "./beats";
 import type { DoodleBeat } from "./beats";
 import { Doodle } from "./Doodle";
 
@@ -8,12 +7,12 @@ const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
 // Doodles are big and clearly visible in the upper band, on top of the
 // still-playing video - NOT tucked into a tiny corner. Captions live lower
 // (starting ~52% down) so the two never overlap.
-export const DoodleLayer: React.FC = () => {
+export const DoodleLayer: React.FC<{ beats: DoodleBeat[] }> = ({ beats }) => {
   const { fps } = useVideoConfig();
 
   return (
     <>
-      {DOODLE_BEATS.map((beat, index) => {
+      {beats.map((beat, index) => {
         const from = msToFrame(beat.startMs, fps);
         const durationFrames = msToFrame(beat.endMs, fps) - from;
         if (durationFrames <= 0) return null;

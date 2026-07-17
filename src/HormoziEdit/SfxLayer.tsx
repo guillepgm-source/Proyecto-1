@@ -1,5 +1,5 @@
 import { Audio, Sequence, staticFile, useVideoConfig } from "remotion";
-import { SFX_BEATS } from "./beats";
+import type { SfxBeat } from "./beats";
 
 const msToFrame = (ms: number, fps: number) => Math.round((ms / 1000) * fps);
 
@@ -11,12 +11,12 @@ const VOLUME_SCALE = 0.4;
 // layered sparingly under the punchiest moments - title card, graphic
 // reveals, and a couple of the hardest cuts. Not on every cut, so it stays
 // snappy instead of grating.
-export const SfxLayer: React.FC = () => {
+export const SfxLayer: React.FC<{ beats: SfxBeat[] }> = ({ beats }) => {
   const { fps } = useVideoConfig();
 
   return (
     <>
-      {SFX_BEATS.map((beat, index) => (
+      {beats.map((beat, index) => (
         <Sequence
           key={index}
           from={msToFrame(beat.atMs, fps)}

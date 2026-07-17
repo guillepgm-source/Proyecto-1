@@ -191,3 +191,19 @@ export const DOODLE_BEATS: DoodleBeat[] = [
   { kind: "counter", startMs: 3153, endMs: 3929, side: "right", label: "2" },
   { kind: "counter", startMs: 5154, endMs: 5900, side: "left", label: "3" },
 ];
+
+// Bundle so each video's beats can be swapped in via props instead of a
+// hardcoded module import - lets HormoziEdit render more than one video.
+export type BeatsData = {
+  titleCard: TitleCardBeat[];
+  cutaway: CutawayBeat[];
+  sfx: SfxBeat[];
+  doodle: DoodleBeat[];
+};
+
+export const BEATS_V1: BeatsData = {
+  titleCard: TITLE_CARD_BEATS,
+  cutaway: CUTAWAY_BEATS,
+  sfx: SFX_BEATS,
+  doodle: DOODLE_BEATS,
+};

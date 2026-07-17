@@ -20,7 +20,7 @@ import {
   getZoomPunchScale,
 } from "./zoomPunch";
 import type { CutSegment } from "./types";
-import { TITLE_CARD_BEATS } from "./beats";
+import { BEATS_V1, type BeatsData } from "./beats";
 
 // Short, punchy groups of 1-2 words per caption page for a fast hook-style
 // pace that also comfortably fits the narrower vertical-strip width.
@@ -35,6 +35,9 @@ export type HormoziEditProps = {
   videoSrc: string;
   captionsSrc: string;
   cutlistSrc: string;
+  // Per-video graphics/SFX timing - defaults to the first video's beats so
+  // existing defaultProps that don't pass this explicitly still work.
+  beats?: BeatsData;
   // Populated by calculateMetadata before the component ever renders.
   cutlist?: CutSegment[];
   pages?: TikTokPage[];
@@ -84,6 +87,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   videoSrc,
   cutlist = [],
   pages = [],
+  beats = BEATS_V1,
 }) => {
   const frame = useCurrentFrame();
   const { width, fps } = useVideoConfig();
@@ -99,10 +103,10 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   // Hide the running captions while a big pixel title card is on screen -
   // showing both at once duplicates the same words and looks cluttered.
   const nowMs = (frame / fps) * 1000;
-  const titleCardActive = TITLE_CARD_BEATS.some(
+  const titleCardActive = beats.titleCard.some(
     (beat) => nowMs >= beat.startMs - 150 && nowMs < beat.endMs,
   );
-  const cutawayActive = isCutawayActive(nowMs);
+  const cutawayActive = isCutawayActive(nowMs, beats.cutaway);
   const hideRunningCaptions = titleCardActive || cutawayActive;
 
   return (
@@ -135,15 +139,15 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
         }}
       />
 
-      <DoodleLayer />
-      <TitleCardLayer />
-      <SfxLayer />
+      <DoodleLayer beats={beats.doodle} />
+      <TitleCardLayer beats={beats.titleCard} />
+      <SfxLayer beats={beats.sfx} />
 
       <AbsoluteFill style={{ opacity: hideRunningCaptions ? 0 : 1 }}>
         <CaptionOverlay pages={pages} containerWidth={captionWidth} />
       </AbsoluteFill>
 
-      <CutawayLayer />
+      <CutawayLayer beats={beats.cutaway} />
 
       <AbsoluteFill
         style={{ backgroundColor: "white", opacity: flashOpacity }}
