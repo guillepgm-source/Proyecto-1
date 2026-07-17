@@ -9,7 +9,11 @@ export const JumpCutVideo: React.FC<{
   videoSrc: string;
   cutlist: CutSegment[];
   objectPosition?: string;
-}> = ({ videoSrc, cutlist, objectPosition = "50% 50%" }) => {
+  // Raw phone recordings often come in quiet (well under typical social
+  // loudness targets) - a linear gain multiplier to bring the dialogue up.
+  // Keep under ~2.5 for this source's peak levels or it'll clip.
+  audioGain?: number;
+}> = ({ videoSrc, cutlist, objectPosition = "50% 50%", audioGain = 1 }) => {
   return (
     <>
       {cutlist.map((segment, index) => (
@@ -25,6 +29,7 @@ export const JumpCutVideo: React.FC<{
             trimBefore={segment.trimBefore}
             trimAfter={segment.trimAfter}
             objectFit="cover"
+            volume={() => audioGain}
             style={{ width: "100%", height: "100%", objectPosition }}
           />
         </Sequence>

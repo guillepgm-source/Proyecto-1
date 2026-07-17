@@ -38,6 +38,9 @@ export type HormoziEditProps = {
   // Per-video graphics/SFX timing - defaults to the first video's beats so
   // existing defaultProps that don't pass this explicitly still work.
   beats?: BeatsData;
+  // Linear gain on the dialogue track - some raw phone recordings come in
+  // much quieter than others.
+  audioGain?: number;
   // Populated by calculateMetadata before the component ever renders.
   cutlist?: CutSegment[];
   pages?: TikTokPage[];
@@ -88,6 +91,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
   cutlist = [],
   pages = [],
   beats = BEATS_V1,
+  audioGain = 1,
 }) => {
   const frame = useCurrentFrame();
   const { width, fps } = useVideoConfig();
@@ -120,6 +124,7 @@ export const HormoziEdit: React.FC<HormoziEditProps> = ({
         <JumpCutVideo
           videoSrc={videoSrc}
           cutlist={cutlist}
+          audioGain={audioGain}
           objectPosition={VIDEO_OBJECT_POSITION}
         />
       </AbsoluteFill>

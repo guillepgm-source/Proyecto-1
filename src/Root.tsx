@@ -36,6 +36,7 @@ export const RemotionRoot: React.FC = () => {
           captionsSrc: "captions/source2.json",
           cutlistSrc: "captions/cutlist2.json",
           beats: BEATS_V2,
+          audioGain: 2.4,
         }}
         calculateMetadata={hormoziEditCalculateMetadata}
       />
