@@ -101,6 +101,19 @@ puntos como checklist antes de improvisar algo nuevo.
 - **ivanprietox** (TikTok/IG, vídeo "Subí dos veces el mismo vídeo...") -
   referencia táctica de qué cambios de hook mueven la retención de verdad
   (ver checklist arriba), con dato de antes/después real.
+- **it.is.joao / name.is.joao** (Instagram, vídeo "The #1 reason you don't
+  gain followers on IG") - referencia de **estrategia de cuenta**, no de
+  edición. El creador compara sus dos propias cuentas como prueba: la
+  cuenta de nicho cerrado y formato 100% repetido (`name.is.joao` - solo
+  consejos de citas para hombres, mismo estilo de miniatura/caption en
+  cada reel, sigue a 1 sola cuenta) tiene 1.7M seguidores con vistas de
+  233K-5.6M por vídeo; la cuenta de contenido disperso (`it.is.joao` -
+  BJJ, boxeo, coches, temas random) solo tiene 181K con 10 posts. Tesis
+  con dato real detrás: **consistencia de nicho + formato visual
+  repetible = lo que multiplica el crecimiento**, más que cualquier
+  efecto de edición puntual. Aplicar esto como filtro antes de aceptar
+  cualquier idea de vídeo: ¿encaja en el mismo nicho y mismo formato que
+  los anteriores, o es contenido disperso?
 
 ## Contexto del canal
 - Nicho: fitness/gimnasio. El usuario trabaja en un gimnasio y su ángulo
